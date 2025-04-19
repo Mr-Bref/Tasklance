@@ -1,0 +1,165 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  name          String?
+  projects      Project[]
+  emailVerified Boolean
+  image         String?       @db.Text
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+  participants  Participant[]
+  Invitation    Invitation[]
+
+  @@map("user")
+}
+
+model Project {
+  id           String        @id @default(uuid())
+  name         String
+  owner        User          @relation(fields: [ownerId], references: [id])
+  ownerId      String
+  tasks        Task[]
+  participants Participant[]
+  Invitation   Invitation[]
+}
+
+model Task {
+  id              String            @id @default(uuid())
+  title           String
+  description     String
+  status          Status            @default(TODO)
+  priority        Priority            @default(MEDIUM)
+  dueDate         DateTime
+  project         Project           @relation(fields: [projectId], references: [id])
+  projectId       String
+  taskAssignement TaskAssignement[]
+}
+
+model Participant {
+  id              String            @id @default(uuid())
+  project         Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId       String
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  role            Role              @default(MEMBER)
+  taskAssignement TaskAssignement[]
+
+  @@unique([userId, projectId])
+}
+
+model TaskAssignement {
+  id String @id @default(uuid())
+
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  participantId String
+
+  assignedAt DateTime @default(now()) // Optionnel, mais utile
+
+  @@unique([taskId, participantId])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?  @db.Text
+  userAgent String?  @db.Text
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String    @db.Text
+  providerId            String    @db.Text
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?   @db.Text
+  password              String?   @db.Text
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Invitation {
+  id        String   @id @default(uuid())
+  email     String // email de l'invité
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  inviter   User     @relation(fields: [inviterId], references: [id])
+  inviterId String
+  role      Role     @default(MEMBER)
+  token     String   @unique // pour générer le lien
+  //accepted  Boolean  @default(false)
+  status    InvitationStatus @default(PENDING)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Verification {
+  id         String    @id
+  identifier String    @db.Text
+  value      String    @db.Text
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+enum Role {
+  VIEWER
+  MEMBER
+  MANAGER
+}
+
+enum Status {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+  REVIEWED
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
