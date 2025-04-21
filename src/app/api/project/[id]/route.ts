@@ -3,15 +3,18 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-
+export async function GET(
+  _req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   // Fetch the session to check for authorization
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   // Extract the project ID from params
-  const { id } = params;
+  const { id } = await context.params;
+
 
   // Check if the session exists, if not return an unauthorized error
   if (!session?.user) {
@@ -87,12 +90,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   });
 
   // Return the mapped tasks as JSON response
-  return NextResponse.json( {
+  return NextResponse.json({
     tasks: mappedTasks,
-    participants: project.participants?.map((p) => ({
-      id: p.user.id,
-      name: p.user.name || "Unnamed",
-      avatar: p.user.image || "/placeholder.svg?height=32&width=32",
-    })) ?? [],
+    participants:
+      project.participants?.map((p) => ({
+        id: p.user.id,
+        name: p.user.name || "Unnamed",
+        avatar: p.user.image || "/placeholder.svg?height=32&width=32",
+      })) ?? [],
   });
 }
