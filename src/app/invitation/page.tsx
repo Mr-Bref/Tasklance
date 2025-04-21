@@ -1,13 +1,11 @@
 import { checkInvitation, acceptInvitation, declineInvitation } from '@/actions/invitation'
 
 type Props = {
-  searchParams: {
-    token?: string
-  }
+  searchParams: Promise<{ token?: string }>;
 }
 
 export default async function InvitationPage({ searchParams }: Props) {
-  const token = searchParams.token
+  const { token } = await searchParams;
 
   if (!token) {
     return <div>Invalid invitation link.</div>
