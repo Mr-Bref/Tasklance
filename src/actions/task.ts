@@ -10,10 +10,11 @@ type CreateTaskInput = {
   description?: string
   dueDate: Date
   priority: "LOW" | "MEDIUM" | "HIGH"
-  projectId: string
+  projectId: string,
 }
 
 import { Status } from "@prisma/client";
+import { pusherServer } from "@/lib/pusher-server";
 
 // map lowercase strings to Prisma enums
 const statusMap: Record<string, Status> = {
@@ -45,6 +46,10 @@ export async function createTask(data: CreateTaskInput) {
     },
   })
 
+  await pusherServer.trigger('private-project-' + projectId, 'new-task-event', {
+    message: 'Yo user!',
+  });
+
 }
 
 
@@ -62,6 +67,9 @@ export async function updateTaskStatus(taskId: string, status: string) {
     select: { projectId: true },
   });
 
+  await pusherServer.trigger('private-project-' +  updatedTask.projectId, 'task-update-event', {
+    message: 'Yo user!',
+  });
   return updatedTask.projectId;
 }
 
@@ -91,6 +99,14 @@ const UpdateTaskSchema = z.object({
   priority: z.enum(["low", "medium", "high"]),
   status: z.enum(["todo", "inprogress", "completed", "canceled", "reviewed"]),
   dueDate: z.date(),
+  assignees: z.array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          avatar: z.string(),
+        })
+      )
+      .optional(),
 });
 
 
@@ -101,16 +117,32 @@ export async function updateTask(input: z.infer<typeof UpdateTaskSchema>) {
     throw new Error("Invalid task data");
   }
 
+
   const {
     id,
     title,
     description,
     priority,
     dueDate,
-    status
+    status,
+    assignees
   } = validated.data;
 
+
   try {
+    const participants = await prisma.participant.findMany({
+      where: {
+        userId: {
+          in: assignees?.map(assignee => assignee.id), 
+        },
+      },
+      select: {
+        id: true, // Select the userId (or any necessary fields)
+      },
+    });
+
+    console.log(participants)
+
     const task = await prisma.task.update({
       where: { id },
       data: {
@@ -118,9 +150,16 @@ export async function updateTask(input: z.infer<typeof UpdateTaskSchema>) {
         description,
         priority: priority.toUpperCase() as "LOW" | "MEDIUM" | "HIGH",
         status: status.toUpperCase() as "TODO" | "IN_PROGRESS" | "COMPLETED" | "CANCELED" | "REVIEWED",
-        dueDate,
+        dueDate  
       },
       select: { projectId: true },
+    });
+
+    await prisma.taskAssignement.createMany({
+      data: participants.map((participant) => ({
+        taskId: id, // id de la tâche que tu es en train de modifier
+        participantId: participant.id, // le participant assigné à la tâche
+      })),
     });
 
     return task.projectId;

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { TaskCard, TaskStatus } from "./TaskCard";
 import { NewTaskDialog } from "./NewTaskDialog";
 import { useTaskContext } from "@/context/TaskContext";
+import { toast } from "sonner";
 import {
   closestCenter,
   DndContext,
@@ -19,6 +20,8 @@ import {
 import { updateTaskStatus } from "@/actions/task";
 import Column from "./Column";
 import { EditTaskDialog } from "./EditTaskDialog";
+import { createPusherClient } from "@/lib/pusher-client";
+import { Channel } from "pusher-js";
 export default function Task({ projectId }: { projectId: string }) {
   const { tasks, fetchTasks, updateTaskLocally } = useTaskContext();
   const [formOpen, setFormOpen] = useState(false);
@@ -39,6 +42,46 @@ export default function Task({ projectId }: { projectId: string }) {
   useEffect(() => {
     fetchTasks(projectId); // Fetch tasks when the component mounts
   }, [projectId]);
+
+  useEffect(() => {
+    let channel: Channel;
+  
+    const setupPusher = async () => {
+      const pusher = await createPusherClient();
+      channel = pusher.subscribe('private-project-' + projectId);
+      
+      channel.bind('new-task-event', () => {
+        console.log(`New task data`);
+        fetchTasks(projectId)
+        toast.success('New task created')
+      });
+
+      channel.bind('task-update-event', (data: string) => {
+        console.log(`task updated`);
+        fetchTasks(projectId)
+        console.log(data)
+      });
+
+      channel.bind('pusher:subscription_succeeded', () => {
+        console.log('👥 Utilisateurs en ligne :', channel.subscribed);
+      });
+    
+      channel.bind('pusher:member_added', (member: unknown) => {
+        console.log('✅ User connecté :', member);
+      });
+  
+    };
+  
+    setupPusher();
+  
+    return () => {
+      if (channel) {
+        channel.unbind_all();
+        channel.unsubscribe();
+      }
+    };
+  }, [projectId]);
+  
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
@@ -76,11 +119,12 @@ export default function Task({ projectId }: { projectId: string }) {
               onOpenChange={setFormOpen}
               projectId={projectId}
             />
+            
             {/* Edit task Dialog */}
             <EditTaskDialog />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
 
             <Column
               id="todo"
@@ -118,7 +162,7 @@ export default function Task({ projectId }: { projectId: string }) {
                       status={task.status}
                       priority={task.priority}
                       dueDate={task.dueDate}
-                      assignee={task.assignee}
+                      assignees={task.assignees}
                       className="opacity-80 scale-105 pointer-events-none"
                     />
                   );

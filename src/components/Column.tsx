@@ -25,7 +25,7 @@ export function Column({ title, color, tasks, emptyMessage, id }: ColumnProps) {
       </h2>
       <div
         ref={setNodeRef}
-        className={`space-y-3 border-gray-200 rounded-md overflow-x-hidden border-2 p-6 transition-all duration-300 ${
+        className={`space-y-3 border-gray-200 rounded-md overflow-x-hidden border-2 p-4 flex flex-col items-center transition-all duration-300 ${
           isOver ? "border-blue-500 bg-blue-100" : "border-gray-200"
         }`}
       >

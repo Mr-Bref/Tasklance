@@ -101,12 +101,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       const sessionResponse = await authClient.getSession();
       const user = sessionResponse?.data?.user ?? null;
       setUser(user);
-
-      if (user) {
-        await fetchProjects();
-      }
     }
-
+    
     fetchData();
   }, []);
 
@@ -160,7 +156,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </Dialog>
           </SidebarMenuItem>
         </SidebarMenu>
-        <NavProjects projects={projects} />
+        <NavProjects projects={projects} fetchProject={fetchProjects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser

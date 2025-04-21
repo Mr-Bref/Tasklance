@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {prisma} from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
@@ -20,9 +20,26 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const userId = session.user.id; // ou peu importe comment tu récupères l'id
+
   // Fetch the project from the database, including tasks and task assignments
   const project = await prisma.project.findFirst({
-    where: { id },
+    where: {
+      id,
+      OR: [
+        { ownerId: userId },
+        {
+          participants: {
+            some: {
+              userId: userId,
+            },
+          },
+          NOT: {
+            ownerId: userId,
+          },
+        },
+      ],
+    },
     include: {
       tasks: {
         include: {
@@ -37,6 +54,7 @@ export async function GET(
           },
         },
       },
+      participants: { include: { user: true } },
     },
   });
 
@@ -47,7 +65,17 @@ export async function GET(
 
   // Map over the tasks and structure them as needed
   const mappedTasks = project.tasks.map((task) => {
-    const firstAssignee = task.taskAssignement?.[0]?.participant?.user;
+    const assignees = task.taskAssignement
+      ?.map((assignement) => {
+        const user = assignement.participant?.user;
+        if (!user) return null;
+        return {
+          id: user.id,
+          name: user.name || "Unnamed",
+          avatar: user.image || "/placeholder.svg?height=32&width=32",
+        };
+      })
+      .filter(Boolean); // pour enlever les nulls
 
     return {
       id: task.id,
@@ -56,16 +84,17 @@ export async function GET(
       status: task.status.toLowerCase(),
       priority: task.priority.toLowerCase(),
       dueDate: new Date(task.dueDate),
-      ...(firstAssignee && {
-        assignee: {
-          id: firstAssignee.id,
-          name: firstAssignee.name || "Unnamed",  // Fallback to "Unnamed" if no name
-          avatar: firstAssignee.image || "/placeholder.svg?height=32&width=32",  // Default avatar
-        },
-      }),
+      ...(assignees?.length && { assignees }), // s'il y a au moins un assignee
     };
   });
 
   // Return the mapped tasks as JSON response
-  return NextResponse.json(mappedTasks);
+  return NextResponse.json( {
+    tasks: mappedTasks,
+    participants: project.participants?.map((p) => ({
+      id: p.user.id,
+      name: p.user.name || "Unnamed",
+      avatar: p.user.image || "/placeholder.svg?height=32&width=32",
+    })) ?? [],
+  });
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react";
+import { Folder, MoreHorizontal, Trash2, User2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -20,21 +20,26 @@ import {
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InviteDialog } from "./InviteDialog";
 
-export function NavProjects({
-  projects,
-}: {
+interface NavProjectsProps {
   projects: {
     name: string;
     id: string;
   }[];
-}) {
+  fetchProject: () => Promise<void>;
+}
+
+export function NavProjects({ projects, fetchProject }: NavProjectsProps) {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [currentProjectId, setCurrenProjectId] = useState("");
+
+  useEffect(() => {
+    fetchProject();
+  }, []);
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -82,8 +87,8 @@ export function NavProjects({
                     setCurrenProjectId(item.id);
                   }}
                 >
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
+                  <User2 className="text-muted-foreground" />
+                  <span>Invite</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>

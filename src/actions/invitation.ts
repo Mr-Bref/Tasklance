@@ -109,7 +109,7 @@ export async function acceptInvitation(formData: FormData) {
     data: { status: 'ACCEPTED' },
   })
 
-  redirect(`/project/${invitation.projectId}`)
+  redirect(`/dashboard/projects/${invitation.projectId}/view`)
 }
 
 export async function declineInvitation(formData: FormData) {

@@ -3,6 +3,12 @@ import React, { createContext, useState, useContext, ReactNode } from "react";
 import { getTasksById } from "@/data/Project"; // Adjust the import based on your actual data fetching logic
 import { TaskProps, TaskStatus } from "@/components/TaskCard"; // Assuming TaskProps is the correct type for tasks
 
+export type UserPreview = {
+  id: string;
+  name: string;
+  avatar: string;
+};
+
 // Define the context state and actions
 interface TaskContextType {
   tasks: TaskProps[];
@@ -13,18 +19,21 @@ interface TaskContextType {
   setTaskBeingEdited: (task: TaskProps | null) => void;
   isEditDialogOpen: boolean;
   setIsEditDialogOpen: (open: boolean) => void;
+  participants: UserPreview[]
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);
+  const [participants, setParticipants] = useState<UserPreview[]>([]);
   const [taskBeingEdited, setTaskBeingEdited] = useState<TaskProps | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const fetchTasks = async (projectId: string) => {
     const data = await getTasksById(projectId);
-    setTasks(data);
+    setTasks(data.tasks);
+    setParticipants(data.participants);
   };
 
   const updateTaskLocally = async (id: string, newStatus: TaskStatus) => {
@@ -47,6 +56,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         setTaskBeingEdited,
         isEditDialogOpen,
         setIsEditDialogOpen,
+        participants,
       }}
     >
       {children}

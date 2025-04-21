@@ -43,17 +43,17 @@ export type TaskStatus =
 export type TaskPriority = "low" | "medium" | "high";
 
 export interface TaskProps {
+  assignees: {
+    id: string;
+    name: string;
+    avatar?: string;
+  }[];
   id: string;
   title: string;
   description?: string;
   status: TaskStatus;
   priority: TaskPriority;
   dueDate?: Date;
-  assignee?: {
-    id: string;
-    name: string;
-    avatar?: string;
-  };
   className?: string;
   onStatusChange?: (id: string, status: TaskStatus) => void;
 }
@@ -65,7 +65,7 @@ export function TaskCard({
   status,
   priority,
   dueDate,
-  assignee,
+  assignees,
   className,
   onStatusChange,
 }: TaskProps) {
@@ -121,35 +121,46 @@ export function TaskCard({
     >
       <Card
         className={cn(
-          "cursor-grab active:cursor-grabbing",
+          "cursor-grab active:cursor-grabbing p-3 mx-auto",
           "w-full min-w-[300px] max-w-md transition-all hover:shadow-md",
           className
         )}
       >
-        <CardHeader className="pb-2 flex flex-row justify-between items-start">
-          <div className="space-y-1">
-            <Badge variant={statusConfig[currentStatus].variant}>
-              {statusConfig[currentStatus].label}
+        <CardHeader className="py-0 px-3 flex flex-row justify-between items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <Badge
+              variant={statusConfig[currentStatus]?.variant || "outline"}
+              className="whitespace-nowrap text-xs px-1.5 py-0"
+            >
+              {statusConfig[currentStatus]?.label || "Task"}
             </Badge>
-            <h3 className="font-semibold text-base leading-tight">{title}</h3>
+            <h3 className="font-medium text-sm leading-tight truncate">
+              {title}
+            </h3>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 flex-shrink-0"
+              >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {Object.keys(statusConfig).map((key) => (
-                <DropdownMenuItem
-                  key={key}
-                  onClick={() => handleStatusChange(key as TaskStatus)}
-                >
-                  Mark as {statusConfig[key as TaskStatus].label}
-                </DropdownMenuItem>
-              ))}
+              {Object.keys(statusConfig)
+                .filter((key) => key !== "default")
+                .map((key) => (
+                  <DropdownMenuItem
+                    key={key}
+                    onClick={() => handleStatusChange(key as TaskStatus)}
+                  >
+                    Mark as {statusConfig[key as TaskStatus].label}
+                  </DropdownMenuItem>
+                ))}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
@@ -160,7 +171,7 @@ export function TaskCard({
                     status: currentStatus,
                     priority,
                     dueDate,
-                    assignee,
+                    assignees,
                   });
                   setIsEditDialogOpen(true);
                 }}
@@ -177,23 +188,31 @@ export function TaskCard({
           </DropdownMenu>
         </CardHeader>
 
-        <CardContent>
-          {description && (
-            <p className="text-sm text-muted-foreground mb-4">{description}</p>
-          )}
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-sm">
-              {priorityConfig[priority].icon}
+        {description && (
+          <CardContent className="py-0 px-3">
+            <p className="text-xs text-muted-foreground line-clamp-2">
+              {description}
+            </p>
+          </CardContent>
+        )}
+
+        <CardFooter className="py-0 px-3 flex flex-col gap-1.5">
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center gap-1.5 text-xs">
+              {priorityConfig[priority]?.icon || (
+                <span className="h-2 w-2 rounded-full bg-slate-400" />
+              )}
               <span className="text-muted-foreground">
-                {priorityConfig[priority].label} Priority
+                {priorityConfig[priority]?.label || "Normal"}
               </span>
             </div>
+
             {dueDate && (
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-1.5 text-xs">
                 {isOverdue ? (
-                  <AlertCircle className="h-4 w-4 text-destructive" />
+                  <AlertCircle className="h-3 w-3 text-destructive" />
                 ) : (
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <Calendar className="h-3 w-3 text-muted-foreground" />
                 )}
                 <span
                   className={cn(
@@ -201,48 +220,53 @@ export function TaskCard({
                     isOverdue && "text-destructive font-medium"
                   )}
                 >
-                  {isOverdue ? "Overdue: " : "Due: "}
-                  {format(dueDate, "MMM d, yyyy")}
+                  {format(dueDate, "MMM d")}
                 </span>
               </div>
             )}
           </div>
-        </CardContent>
 
-        <CardFooter className="pt-2 flex justify-between items-center">
-          {assignee ? (
-            <div className="flex items-center gap-2">
-              <Avatar className="h-6 w-6">
-                <AvatarImage src={assignee.avatar} alt={assignee.name} />
-                <AvatarFallback>{assignee.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <span className="text-xs text-muted-foreground">
-                {assignee.name}
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <User className="h-4 w-4" />
-              <span>Unassigned</span>
-            </div>
-          )}
+          <div className="flex justify-between items-center w-full">
+          {assignees && assignees.length > 0 ? (
+  <div className="flex items-center gap-1.5">
+    <Avatar className="h-5 w-5">
+      <AvatarImage
+        src={assignees[0]?.avatar || "/placeholder.svg"} // Use the first assignee
+        alt={assignees[0]?.name}
+      />
+      <AvatarFallback className="text-[10px]">
+        {assignees[0]?.name.charAt(0)} {/* Display first character of the first assignee's name */}
+      </AvatarFallback>
+    </Avatar>
+    <span className="text-xs text-muted-foreground truncate max-w-[100px]">
+      {assignees[0]?.name} {/* Display the name of the first assignee */}
+    </span>
+  </div>
+) : (
+  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+    <User className="h-3 w-3" />
+    <span>Unassigned</span>
+  </div>
+)}
 
-          {currentStatus !== "completed" ? (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-7 text-xs"
-              onClick={() => handleStatusChange("completed")}
-            >
-              <CheckCircle2 className="mr-1 h-3 w-3" />
-              Complete
-            </Button>
-          ) : (
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Clock className="h-3 w-3" />
-              <span>Completed</span>
-            </div>
-          )}
+
+            {currentStatus !== "completed" ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-6 text-xs px-2"
+                onClick={() => handleStatusChange("completed")}
+              >
+                <CheckCircle2 className="mr-1 h-3 w-3" />
+                Complete
+              </Button>
+            ) : (
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="h-3 w-3" />
+                <span>Completed</span>
+              </div>
+            )}
+          </div>
         </CardFooter>
       </Card>
     </div>
