@@ -67,9 +67,9 @@ export async function updateTaskStatus(taskId: string, status: string) {
     select: { projectId: true },
   });
 
-  await pusherServer.trigger('private-project-' +  updatedTask.projectId, 'task-update-event', {
-    message: 'Yo user!',
-  });
+  // await pusherServer.trigger('private-project-' +  updatedTask.projectId, 'task-update-event', {
+  //   message: 'Yo user!',
+  // });
   return updatedTask.projectId;
 }
 
