@@ -18,10 +18,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { InviteDialog } from "./InviteDialog";
+import { cn } from "@/lib/utils";
 
 interface NavProjectsProps {
   projects: {
@@ -37,6 +38,8 @@ export function NavProjects({ projects, fetchProject }: NavProjectsProps) {
   const [open, setOpen] = useState(false);
   const [currentProjectId, setCurrenProjectId] = useState("");
 
+  const pathname = usePathname();
+
   useEffect(() => {
     fetchProject();
   }, []);
@@ -50,55 +53,61 @@ export function NavProjects({ projects, fetchProject }: NavProjectsProps) {
         currentProjectId={currentProjectId}
       />
       <SidebarMenu>
-        {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <Link
-                className="cursor-pointer"
-                href={`/dashboard/projects/${item.id}/view`}
-              >
-                {item.name}
-              </Link>
-            </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
-              >
-                <DropdownMenuItem
-                  onClick={() =>
-                    router.push(`/dashboard/projects/${item.id}/view`)
-                  }
-                  className="cursor-pointer"
+        {projects.map((item) => {
+          const isActive = pathname.includes(`/projects/${item.id}/view`);
+          return (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton asChild>
+                <Link
+                  href={`/dashboard/projects/${item.id}/view`}
+                  className={cn(
+                    "cursor-pointer py-5 text-lg font-medium", 
+                    isActive && "bg-muted text-green-500"
+                  )}
                 >
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setOpen(true);
-                    setCurrenProjectId(item.id);
-                  }}
+                  {item.name}
+                </Link>
+              </SidebarMenuButton>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuAction showOnHover>
+                    <MoreHorizontal />
+                    <span className="sr-only">More</span>
+                  </SidebarMenuAction>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-48 rounded-lg"
+                  side={isMobile ? "bottom" : "right"}
+                  align={isMobile ? "end" : "start"}
                 >
-                  <User2 className="text-muted-foreground" />
-                  <span>Invite</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        ))}
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(`/dashboard/projects/${item.id}/view`)
+                    }
+                    className="cursor-pointer"
+                  >
+                    <Folder className="text-muted-foreground" />
+                    <span>View Project</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setOpen(true);
+                      setCurrenProjectId(item.id);
+                    }}
+                  >
+                    <User2 className="text-muted-foreground" />
+                    <span>Invite</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Trash2 className="text-muted-foreground" />
+                    <span>Delete Project</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          );
+        })}
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <MoreHorizontal className="text-sidebar-foreground/70" />

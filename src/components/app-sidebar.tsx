@@ -109,7 +109,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   if (!user) return null; // Si l'utilisateur n'est pas connecté, on ne rend rien
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props} className="bg-violet-400">
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
@@ -119,8 +119,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <SidebarMenuButton
+                className="py-6 px-2 hover:cursor-pointer hover:text-dark rounded-none bg-green-400 hover:bg-green-300 font-semibold"
                   tooltip="New Project"
-                  className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear"
                 >
                   <PlusCircleIcon />
                   New Project

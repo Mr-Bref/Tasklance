@@ -19,11 +19,11 @@ import { PlusIcon } from "lucide-react"
     return (
       <Dialog  open={open} onOpenChange={onOpenChange}>
         <DialogTrigger asChild>
-          <Button variant="default"><PlusIcon /> New Task</Button>
+          <Button variant="default" className="text-black hover:cursor-pointer rounded-none bg-green-400"><PlusIcon /> New Task</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[500px] top-10 sm:top-10 translate-y-0">
           <DialogHeader>
-            <DialogTitle>Create New Task</DialogTitle>
+            <DialogTitle >Create New Task</DialogTitle>
             <DialogDescription>
               Fill in the task details below.
             </DialogDescription>

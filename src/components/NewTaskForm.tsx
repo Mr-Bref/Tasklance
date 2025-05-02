@@ -178,7 +178,7 @@ export function NewTaskForm({
           )}
         />
 
-        <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>
+        <Button className="w-full" type="submit" disabled={!isDirty || !isValid || isSubmitting}>
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
