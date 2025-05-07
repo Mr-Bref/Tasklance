@@ -6,11 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./node_modules/@prisma/client"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -25,7 +26,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   participants  Participant[]
-  Invitation    Invitation[]
+  invitations    Invitation[]
 
   @@map("user")
 }
@@ -35,31 +36,31 @@ model Project {
   name         String
   owner        User          @relation(fields: [ownerId], references: [id])
   ownerId      String
-  tasks        Task[]
   participants Participant[]
-  Invitation   Invitation[]
+  invitations  Invitation[]
+  states       State[]
 }
 
 model Task {
-  id              String            @id @default(uuid())
-  title           String
-  description     String
-  status          Status            @default(TODO)
-  priority        Priority          @default(MEDIUM)
-  dueDate         DateTime
-  project         Project           @relation(fields: [projectId], references: [id])
-  projectId       String
-  taskAssignement TaskAssignement[]
+  id               String            @id @default(uuid())
+  title            String
+  description      String
+  priority         Priority          @default(MEDIUM)
+  dueDate          DateTime
+  taskAssignements TaskAssignement[]
+
+  state   State  @relation(fields: [stateId], references: [id])
+  stateId String
 }
 
 model Participant {
-  id              String            @id @default(uuid())
-  project         Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId       String
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String
-  role            Role              @default(MEMBER)
-  taskAssignement TaskAssignement[]
+  id               String            @id @default(uuid())
+  project          Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId        String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String
+  role             Role              @default(MEMBER)
+  taskAssignements TaskAssignement[]
 
   @@unique([userId, projectId])
 }
@@ -138,18 +139,22 @@ model Verification {
   @@map("verification")
 }
 
+model State {
+  id        String    @id
+  label     String    @db.Text
+  createdAt DateTime?
+  updatedAt DateTime?
+  tasks     Task[]
+  project   Project   @relation(fields: [projectId], references: [id])
+  projectId String
+
+  @@map("states")
+}
+
 enum Role {
   VIEWER
   MEMBER
   MANAGER
-}
-
-enum Status {
-  TODO
-  IN_PROGRESS
-  COMPLETED
-  CANCELED
-  REVIEWED
 }
 
 enum Priority {

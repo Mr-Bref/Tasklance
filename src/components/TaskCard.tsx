@@ -151,16 +151,11 @@ export function TaskCard({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {Object.keys(statusConfig)
-                .filter((key) => key !== "default")
-                .map((key) => (
-                  <DropdownMenuItem
-                    key={key}
-                    onClick={() => handleStatusChange(key as TaskStatus)}
+              <DropdownMenuItem
+                  //  onClick={() => handleStatusChange(key as TaskStatus)}
                   >
-                    Mark as {statusConfig[key as TaskStatus].label}
+                    Mark task as 
                   </DropdownMenuItem>
-                ))}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {

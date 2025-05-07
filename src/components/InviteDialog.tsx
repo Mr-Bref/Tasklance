@@ -187,8 +187,8 @@ export function InviteDialog({
               <Button
                 type="button"
                 size="sm"
-                variant="ghost"
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                variant="default"
+                className="absolute right-1 cursor-pointer top-1/2 -translate-y-1/2 h-7 w-7 p-0"
                 onClick={addInvitation}
               >
                 <Plus className="h-4 w-4" />

@@ -11,6 +11,7 @@ type CreateTaskInput = {
   dueDate: Date
   priority: "LOW" | "MEDIUM" | "HIGH"
   projectId: string,
+  columnId: string,
 }
 
 import { Status } from "@prisma/client";
@@ -43,6 +44,7 @@ export async function createTask(data: CreateTaskInput) {
       dueDate,
       projectId,
       priority,
+      status: columnId
     },
   })
 
@@ -51,9 +53,6 @@ export async function createTask(data: CreateTaskInput) {
   });
 
 }
-
-
-
 
 
 export async function updateTaskStatus(taskId: string, status: string) {
@@ -67,9 +66,9 @@ export async function updateTaskStatus(taskId: string, status: string) {
     select: { projectId: true },
   });
 
-  // await pusherServer.trigger('private-project-' +  updatedTask.projectId, 'task-update-event', {
-  //   message: 'Yo user!',
-  // });
+   void pusherServer.trigger('private-project-' +  updatedTask.projectId, 'task-update-event', {
+     message: 'Yo user!',
+   });
   return updatedTask.projectId;
 }
 

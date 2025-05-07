@@ -24,13 +24,14 @@ import { createPusherClient } from "@/lib/pusher-client";
 import { Channel } from "pusher-js";
 export default function Task({ projectId }: { projectId: string }) {
   const { tasks, fetchTasks, updateTaskLocally } = useTaskContext();
-  const [formOpen, setFormOpen] = useState(false);
+ 
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
 
   // Group tasks by status
   const todoTasks = tasks.filter((task) => task.status === "todo");
   const inProgressTasks = tasks.filter((task) => task.status === "inprogress");
   const completedTasks = tasks.filter((task) => task.status === "completed");
+  
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -105,7 +106,7 @@ export default function Task({ projectId }: { projectId: string }) {
 
   return (
     <>
-      <div className="container mx-auto py-8 px-4">
+      <div className="container mx-auto px-4">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -114,17 +115,13 @@ export default function Task({ projectId }: { projectId: string }) {
         >
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">Project Tasks</h1>
-            <NewTaskDialog
-              open={formOpen}
-              onOpenChange={setFormOpen}
-              projectId={projectId}
-            />
+            
             
             {/* Edit task Dialog */}
             <EditTaskDialog />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
             <Column
               id="todo"
@@ -132,6 +129,7 @@ export default function Task({ projectId }: { projectId: string }) {
               color="muted"
               tasks={todoTasks}
               emptyMessage="No tasks to do"
+              projectId={projectId}
             />
             <Column
               id="inprogress"
@@ -139,6 +137,8 @@ export default function Task({ projectId }: { projectId: string }) {
               color="secondary"
               tasks={inProgressTasks}
               emptyMessage="No tasks in progress"
+              projectId={projectId}
+
             />
             <Column
               id="completed"
@@ -146,6 +146,7 @@ export default function Task({ projectId }: { projectId: string }) {
               color="primary"
               tasks={completedTasks}
               emptyMessage="No completed tasks"
+              projectId={projectId}
             />
           </div>
           <DragOverlay>

@@ -74,7 +74,7 @@ const TaskSchema = z.object({
 type TaskFormValues = z.infer<typeof TaskSchema>;
 
 const priorityConfig = {
-  low: { label: "Low", color: "bg-slate-400" },
+  low: { label: "Low", color: "bg-slate-600" },
   medium: { label: "Medium", color: "bg-amber-500" },
   high: { label: "High", color: "bg-rose-500" },
 };
@@ -147,7 +147,7 @@ export function EditTaskDialog() {
 
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-      <DialogContent className="max-w-md p-4 overflow-hidden">
+      <DialogContent className="max-w-md p-4 min-h-[500px] overflow-hidden flex justify-start flex-col">
         <DialogHeader className="px-4 pt-3">
           <DialogTitle>Edit Task</DialogTitle>
         </DialogHeader>
@@ -231,8 +231,8 @@ export function EditTaskDialog() {
                                   field.value === value ? "default" : "outline"
                                 }
                                 className={cn(
-                                  "justify-start h-9 px-3",
-                                  field.value === value && "border-2"
+                                  "justify-start h-14 px-3",
+                                  field.value === value && "ring-2"
                                 )}
                                 onClick={() => field.onChange(value)}
                               >
@@ -423,7 +423,7 @@ export function EditTaskDialog() {
                 </TabsContent>
               </div>
 
-              <div className="flex items-center justify-between p-4 border-t bg-muted/30">
+              <div className="flex items-center justify-between p-4 border-t bg-muted/30 absolute bottom-0 left-0 w-full">
                 <div className="flex items-center gap-1">
                   {["details", "schedule", "assignees"].map((tab, index) => (
                     <div

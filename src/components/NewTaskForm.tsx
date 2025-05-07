@@ -46,8 +46,10 @@ type TaskFormValues = z.infer<typeof TaskSchema>;
 export function NewTaskForm({
   projectId,
   onOpenChange,
+  columnId
 }: {
   projectId: string;
+  columnId: string;
   onOpenChange: (open: boolean) => void;
 }) {
   const form = useForm<TaskFormValues>({
@@ -72,6 +74,7 @@ export function NewTaskForm({
     await createTask({
       ...data,
       projectId,
+      columnId
     });
   
     toast("Task created!", {
@@ -120,7 +123,8 @@ export function NewTaskForm({
           )}
         />
 
-        <FormField
+       <div className="flex space-x-4">
+       <FormField
           control={form.control}
           name="priority"
           render={({ field }) => (
@@ -155,7 +159,7 @@ export function NewTaskForm({
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
+                        "w-[240px] pl-3 text-left font-normal cursor-pointer",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -177,6 +181,7 @@ export function NewTaskForm({
             </FormItem>
           )}
         />
+       </div>
 
         <Button className="w-full" type="submit" disabled={!isDirty || !isValid || isSubmitting}>
           {isSubmitting ? (

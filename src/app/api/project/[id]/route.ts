@@ -57,6 +57,7 @@ export async function GET(
       },
       participants: { include: { user: true } },
     },
+    
   });
 
   // If no project is found, return an error message

@@ -14,12 +14,13 @@ import { PlusIcon } from "lucide-react"
     open: boolean
     onOpenChange: (open: boolean) => void
     projectId: string,
+    columnId : string
   }
-  export function NewTaskDialog({ open, onOpenChange, projectId }: NewTaskDialogProps) {
+  export function NewTaskDialog({ open, onOpenChange, projectId , columnId}: NewTaskDialogProps) {
     return (
       <Dialog  open={open} onOpenChange={onOpenChange}>
         <DialogTrigger asChild>
-          <Button variant="default" className="text-black hover:cursor-pointer rounded-none bg-green-400"><PlusIcon /> New Task</Button>
+          <Button variant="outline" className="text-black hover:cursor-pointer rounded-none w-full"><PlusIcon /> New Task</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[500px] top-10 sm:top-10 translate-y-0">
           <DialogHeader>
@@ -28,7 +29,7 @@ import { PlusIcon } from "lucide-react"
               Fill in the task details below.
             </DialogDescription>
           </DialogHeader>
-          <NewTaskForm  projectId={projectId} onOpenChange={onOpenChange} />
+          <NewTaskForm  projectId={projectId} columnId={columnId} onOpenChange={onOpenChange} />
         </DialogContent>
       </Dialog>
     )

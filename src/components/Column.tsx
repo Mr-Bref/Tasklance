@@ -1,7 +1,10 @@
 // components/Column.tsx
 import { useDroppable } from "@dnd-kit/core";
-import TaskCard, {  TaskProps, TaskStatus } from "./TaskCard";
-import React from "react";
+import TaskCard, { TaskProps, TaskStatus } from "./TaskCard";
+import React, { useState } from "react";
+import { Plus } from "lucide-react";
+import { Button } from "./ui/button";
+import { NewTaskDialog } from "./NewTaskDialog";
 
 type ColumnProps = {
   title: string;
@@ -9,14 +12,22 @@ type ColumnProps = {
   tasks: TaskProps[];
   emptyMessage: string;
   id: TaskStatus;
+  projectId: string;
 };
 
-export function Column({ title, color, tasks, emptyMessage, id }: ColumnProps) {
+export function Column({
+  title,
+  color,
+  tasks,
+  emptyMessage,
+  id,
+  projectId,
+}: ColumnProps) {
   const { isOver, setNodeRef } = useDroppable({ id: id });
 
-
+  const [formOpen, setFormOpen] = useState(false);
   return (
-    <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-4 scrollbar-thin">
+    <div className="flex-1 overflow-x-hidden space-y-4 scrollbar-thin">
       <h2 className="text-xl font-semibold flex items-center gap-2">
         <span
           className={`inline-block w-3 h-3 rounded-full bg-${color}`}
@@ -25,7 +36,7 @@ export function Column({ title, color, tasks, emptyMessage, id }: ColumnProps) {
       </h2>
       <div
         ref={setNodeRef}
-        className={`space-y-3 border-gray-200 rounded-md overflow-x-hidden border-2 p-4 flex flex-col items-center transition-all duration-300 ${
+        className={`space-y-3 border-gray-200 rounded-md overflow-y-auto overflow-x-hidden  max-h-[calc(100vh-200px)] border-2 p-4 flex flex-col items-center transition-all duration-300 scroll-p-2 ${
           isOver ? "border-blue-500 bg-blue-100" : "border-gray-200"
         }`}
       >
@@ -38,9 +49,14 @@ export function Column({ title, color, tasks, emptyMessage, id }: ColumnProps) {
           </p>
         )}
       </div>
+      <NewTaskDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        projectId={projectId}
+        columnId={id}
+      />
     </div>
   );
 }
 
 export default React.memo(Column);
-
