@@ -24,7 +24,6 @@ export default async function ProjectPage({
   
   const project = await prisma.project.findUnique({
     where: { id: id },
-    include: { tasks: true },
   });
 
   // Render project details and include AddTask component

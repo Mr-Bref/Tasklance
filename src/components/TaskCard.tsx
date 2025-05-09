@@ -30,46 +30,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { updateTaskStatus, deleteTask } from "@/actions/task";
-import { useTaskContext } from "@/context/TaskContext";
+import { UserPreview, useTaskContext, Task } from "@/context/TaskContext";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-
-export type TaskStatus =
-  | "todo"
-  | "inprogress"
-  | "completed"
-  | "canceled"
-  | "reviewed";
 export type TaskPriority = "low" | "medium" | "high";
 
-export interface TaskProps {
-  assignees: {
-    id: string;
-    name: string;
-    avatar?: string;
-  }[];
-  id: string;
-  title: string;
-  description?: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  dueDate?: Date;
+
+export interface TaskCardProps extends Task {
   className?: string;
-  onStatusChange?: (id: string, status: TaskStatus) => void;
+  state : string;
+  onStatusChange?: (id: string, stateId: string) => void;
 }
 
 export function TaskCard({
   id,
   title,
   description,
-  status,
+  stateId,
+  state,
   priority,
   dueDate,
   assignees,
   className,
   onStatusChange,
-}: TaskProps) {
-  const [currentStatus, setCurrentStatus] = useState<TaskStatus>(status);
+}: TaskCardProps) {
   const { fetchTasks, setIsEditDialogOpen, setTaskBeingEdited } =
     useTaskContext();
 
@@ -79,9 +63,7 @@ export function TaskCard({
     ? { transform: CSS.Translate.toString(transform) }
     : undefined;
 
-  const handleStatusChange = async (newStatus: TaskStatus) => {
-    setCurrentStatus(newStatus);
-    if (onStatusChange) onStatusChange(id, newStatus);
+  const handleStatusChange = async (newStatus: string) => {
     const projectId = await updateTaskStatus(id, newStatus); // raw string
     fetchTasks(projectId);
   };
@@ -92,23 +74,16 @@ export function TaskCard({
   };
 
   const isOverdue =
-    dueDate && dueDate < new Date() && currentStatus !== "completed";
+    dueDate && dueDate < new Date() && state !== "completed";
 
-  const statusConfig = {
-    todo: { label: "To Do", variant: "outline" as const },
-    inprogress: { label: "In Progress", variant: "secondary" as const },
-    completed: { label: "Completed", variant: "default" as const },
-    canceled: { label: "Canceled", variant: "destructive" as const },
-    reviewed: { label: "Reviewed", variant: "outline" as const },
-  };
 
   const priorityConfig = {
-    low: { icon: <Flag className="h-4 w-4 text-green-500" />, label: "Low" },
-    medium: {
+    LOW: { icon: <Flag className="h-4 w-4 text-green-500" />, label: "Low" },
+    MEDIUM: {
       icon: <Flag className="h-4 w-4 text-amber-500" />,
       label: "Medium",
     },
-    high: { icon: <Flag className="h-4 w-4 text-rose-500" />, label: "High" },
+    HIGHT: { icon: <Flag className="h-4 w-4 text-rose-500" />, label: "High" },
   };
 
   return (
@@ -129,10 +104,10 @@ export function TaskCard({
         <CardHeader className="py-0 px-3 flex flex-row justify-between items-center gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <Badge
-              variant={statusConfig[currentStatus]?.variant || "outline"}
+              variant={"outline"}
               className="whitespace-nowrap text-xs px-1.5 py-0"
             >
-              {statusConfig[currentStatus]?.label || "Task"}
+              {}
             </Badge>
             <h3 className="font-medium text-sm leading-tight truncate">
               {title}
@@ -163,7 +138,7 @@ export function TaskCard({
                     id,
                     title,
                     description,
-                    status: currentStatus,
+                    status: state,
                     priority,
                     dueDate,
                     assignees,
@@ -245,7 +220,7 @@ export function TaskCard({
 )}
 
 
-            {currentStatus !== "completed" ? (
+            {state !== "completed" ? (
               <Button
                 variant="outline"
                 size="sm"

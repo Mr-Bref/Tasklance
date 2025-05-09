@@ -1,17 +1,18 @@
 // components/Column.tsx
 import { useDroppable } from "@dnd-kit/core";
-import TaskCard, { TaskProps, TaskStatus } from "./TaskCard";
 import React, { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import { NewTaskDialog } from "./NewTaskDialog";
+import { Task } from "@/context/TaskContext";
+import { TaskCard } from "./TaskCard";
 
 type ColumnProps = {
   title: string;
   color: string; // exemple: "muted", "primary", "secondary"
-  tasks: TaskProps[];
+  tasks: Task[];
   emptyMessage: string;
-  id: TaskStatus;
+  id: string;
   projectId: string;
 };
 
@@ -41,7 +42,7 @@ export function Column({
         }`}
       >
         {tasks.map((task) => (
-          <TaskCard key={task.id} {...task} />
+          <TaskCard key={task.id} {...task} state={title} />
         ))}
         {tasks.length === 0 && (
           <p className="text-sm text-muted-foreground p-4 text-center border border-dashed rounded-lg">

@@ -18,9 +18,6 @@ export async function GET() {
     where: {
       ownerId: userId,
     },
-    include: {
-      tasks: true,
-    },
   });
 
   // 2. Projets où tu es participant (mais pas owner)
@@ -34,9 +31,6 @@ export async function GET() {
       NOT: {
         ownerId: userId,
       },
-    },
-    include: {
-      tasks: true,
     },
   });
 

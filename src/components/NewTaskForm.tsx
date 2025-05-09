@@ -74,7 +74,7 @@ export function NewTaskForm({
     await createTask({
       ...data,
       projectId,
-      columnId
+      stateId: columnId,
     });
   
     toast("Task created!", {

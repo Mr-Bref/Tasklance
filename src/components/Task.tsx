@@ -2,7 +2,7 @@
 
 //import { createTask } from "@/actions/task";
 import { useEffect, useState } from "react";
-import { TaskCard, TaskStatus } from "./TaskCard";
+import { TaskCard } from "./TaskCard";
 import { NewTaskDialog } from "./NewTaskDialog";
 import { useTaskContext } from "@/context/TaskContext";
 import { toast } from "sonner";
@@ -23,15 +23,10 @@ import { EditTaskDialog } from "./EditTaskDialog";
 import { createPusherClient } from "@/lib/pusher-client";
 import { Channel } from "pusher-js";
 export default function Task({ projectId }: { projectId: string }) {
-  const { tasks, fetchTasks, updateTaskLocally } = useTaskContext();
- 
+  const { fetchTasks, updateTaskLocally, taskStates } = useTaskContext();
+
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
 
-  // Group tasks by status
-  const todoTasks = tasks.filter((task) => task.status === "todo");
-  const inProgressTasks = tasks.filter((task) => task.status === "inprogress");
-  const completedTasks = tasks.filter((task) => task.status === "completed");
-  
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -46,35 +41,34 @@ export default function Task({ projectId }: { projectId: string }) {
 
   useEffect(() => {
     let channel: Channel;
-  
+
     const setupPusher = async () => {
       const pusher = await createPusherClient();
-      channel = pusher.subscribe('private-project-' + projectId);
-      
-      channel.bind('new-task-event', () => {
+      channel = pusher.subscribe("private-project-" + projectId);
+
+      channel.bind("new-task-event", () => {
         console.log(`New task data`);
-        fetchTasks(projectId)
-        toast.success('New task created')
+        fetchTasks(projectId);
+        toast.success("New task created");
       });
 
-      channel.bind('task-update-event', (data: string) => {
+      channel.bind("task-update-event", (data: string) => {
         console.log(`task updated`);
-        fetchTasks(projectId)
-        console.log(data)
+        fetchTasks(projectId);
+        console.log(data);
       });
 
-      channel.bind('pusher:subscription_succeeded', () => {
-        console.log('👥 Utilisateurs en ligne :', channel.subscribed);
+      channel.bind("pusher:subscription_succeeded", () => {
+        console.log("👥 Utilisateurs en ligne :", channel.subscribed);
       });
-    
-      channel.bind('pusher:member_added', (member: unknown) => {
-        console.log('✅ User connecté :', member);
+
+      channel.bind("pusher:member_added", (member: unknown) => {
+        console.log("✅ User connecté :", member);
       });
-  
     };
-  
+
     setupPusher();
-  
+
     return () => {
       if (channel) {
         channel.unbind_all();
@@ -82,7 +76,6 @@ export default function Task({ projectId }: { projectId: string }) {
       }
     };
   }, [projectId]);
-  
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
@@ -97,7 +90,7 @@ export default function Task({ projectId }: { projectId: string }) {
     if (!over) return;
 
     const taskId = active.id as string;
-    const newStatus = over.id as TaskStatus;
+    const newStatus = over.id as string;
 
     updateTaskStatus(taskId, newStatus).then(() => {
       updateTaskLocally(taskId, newStatus);
@@ -115,55 +108,46 @@ export default function Task({ projectId }: { projectId: string }) {
         >
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">Project Tasks</h1>
-            
-            
+
             {/* Edit task Dialog */}
             <EditTaskDialog />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-            <Column
-              id="todo"
-              title="To Do"
-              color="muted"
-              tasks={todoTasks}
-              emptyMessage="No tasks to do"
-              projectId={projectId}
-            />
-            <Column
-              id="inprogress"
-              title="In Progress"
-              color="secondary"
-              tasks={inProgressTasks}
-              emptyMessage="No tasks in progress"
-              projectId={projectId}
-
-            />
-            <Column
-              id="completed"
-              title="Completed"
-              color="primary"
-              tasks={completedTasks}
-              emptyMessage="No completed tasks"
-              projectId={projectId}
-            />
+            {taskStates.map((state) => {
+              return (
+                <Column
+                  key={state.id}
+                  title={state.label}
+                  tasks={state.tasks}
+                  emptyMessage="No tasks in this column"
+                  id={state.id}
+                  projectId={projectId}
+                  color='muted'
+                />
+              );
+            })}
           </div>
           <DragOverlay>
             {activeTaskId
               ? (() => {
-                  const task = tasks.find((t) => t.id === activeTaskId);
+                  const task = taskStates
+                    .flatMap((state) => state.tasks)
+                    .find((task) => task.id === activeTaskId);
+                  const state = taskStates.find(
+                    (state) => state.id === task?.stateId 
+                  )
                   if (!task) return null;
-
                   return (
                     <TaskCard
                       id={task.id}
                       title={task.title}
                       description={task.description}
-                      status={task.status}
+                      state={state?.label ?? "Unknown State"}
                       priority={task.priority}
                       dueDate={task.dueDate}
                       assignees={task.assignees}
+                      stateId={task.stateId}
                       className="opacity-80 scale-105 pointer-events-none"
                     />
                   );

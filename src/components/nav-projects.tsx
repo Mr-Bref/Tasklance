@@ -56,7 +56,7 @@ export function NavProjects({ projects, fetchProject }: NavProjectsProps) {
         {projects.map((item) => {
           const isActive = pathname.includes(`/projects/${item.id}/view`);
           return (
-            <SidebarMenuItem key={item.name}>
+            <SidebarMenuItem key={item.id}>
               <SidebarMenuButton asChild>
                 <Link
                   href={`/dashboard/projects/${item.id}/view`}

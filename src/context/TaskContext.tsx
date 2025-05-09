@@ -9,12 +9,32 @@ export type UserPreview = {
   avatar: string;
 };
 
+export interface TaskData {
+  states: TaskState[];
+  participants: UserPreview[];
+}
+
+export interface TaskState {
+  label: string;
+  id: string;
+  tasks: Task[];
+}
+
+export interface Task {
+  id: string;
+  title: string;
+  description: string ;
+  priority: 'LOW' | 'MEDIUM' | 'HIGHT';
+  dueDate: Date;
+  assignees: UserPreview[];
+  stateId: string;
+}
 // Define the context state and actions
 interface TaskContextType {
-  tasks: TaskProps[];
+  taskStates: TaskState[];
   fetchTasks: (projectId: string) => Promise<void>;
   updateTaskLocally: (id: string, newStatus: TaskStatus) => Promise<void>;
-  setTasks: React.Dispatch<React.SetStateAction<TaskProps[]>>;
+  setTaskStates: React.Dispatch<React.SetStateAction<TaskData[]>>;
   taskBeingEdited: TaskProps | null;
   setTaskBeingEdited: (task: TaskProps | null) => void;
   isEditDialogOpen: boolean;
@@ -25,32 +45,30 @@ interface TaskContextType {
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const [tasks, setTasks] = useState<TaskProps[]>([]);
+  const [taskStates, setTaskStates] = useState<TaskData[]>([]);
   const [participants, setParticipants] = useState<UserPreview[]>([]);
   const [taskBeingEdited, setTaskBeingEdited] = useState<TaskProps | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const fetchTasks = async (projectId: string) => {
     const data = await getTasksById(projectId);
-    setTasks(data.tasks);
+    console.log('data');
+    console.log(data);
+    setTaskStates(data.states);
     setParticipants(data.participants);
   };
 
   const updateTaskLocally = async (id: string, newStatus: TaskStatus) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, status: newStatus } : task
-      )
-    );
+   
   };
 
 
   return (
     <TaskContext.Provider
       value={{
-        tasks,
+        taskStates,
         fetchTasks,
-        setTasks,
+        setTaskStates,
         updateTaskLocally,
         taskBeingEdited,
         setTaskBeingEdited,

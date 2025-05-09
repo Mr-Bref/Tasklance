@@ -22,6 +22,13 @@ export async function createProject(formData: FormData) {
     },
   });
 
+  const state = await prisma.state.create({
+    data: {
+      label: "To Do",
+      projectId: project.id,
+    },
+  });
+
   
   return project;
 }

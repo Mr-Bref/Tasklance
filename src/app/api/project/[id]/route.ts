@@ -15,7 +15,6 @@ export async function GET(
   // Extract the project ID from params
   const { id } = await context.params;
 
-
   // Check if the session exists, if not return an unauthorized error
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -24,40 +23,46 @@ export async function GET(
   const userId = session.user.id; // ou peu importe comment tu récupères l'id
 
   // Fetch the project from the database, including tasks and task assignments
-  const project = await prisma.project.findFirst({
+  const project = await prisma.project.findMany({
     where: {
-      id,
       OR: [
-        { ownerId: userId },
+        {
+          ownerId: userId,
+        },
         {
           participants: {
             some: {
               userId: userId,
             },
           },
-          NOT: {
-            ownerId: userId,
-          },
         },
       ],
     },
     include: {
-      tasks: {
+      states: {
         include: {
-          taskAssignement: {
+          tasks: {
             include: {
-              participant: {
+              taskAssignements: {
                 include: {
-                  user: true,
+                  participant: {
+                    include: {
+                      user: true,
+                    },
+                  },
                 },
               },
+              state: true,
             },
           },
         },
       },
-      participants: { include: { user: true } },
+      participants: {
+        include: {
+          user: true,
+        },
+      },
     },
-    
   });
 
   // If no project is found, return an error message
@@ -66,38 +71,38 @@ export async function GET(
   }
 
   // Map over the tasks and structure them as needed
-  const mappedTasks = project.tasks.map((task) => {
-    const assignees = task.taskAssignement
-      ?.map((assignement) => {
-        const user = assignement.participant?.user;
-        if (!user) return null;
-        return {
-          id: user.id,
-          name: user.name || "Unnamed",
-          avatar: user.image || "/placeholder.svg?height=32&width=32",
-        };
-      })
-      .filter(Boolean); // pour enlever les nulls
+  const mappedTasks = project
+    .flatMap((p) => p.states)
+    .map((state) => ({
+      label: state.label,
+      id: state.id,
+      tasks: state.tasks.map((task) => ({
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        priority: task.priority.toLowerCase(),
+        dueDate: new Date(task.dueDate),
+        assignees: task.taskAssignements.map((ta) => ({
+          id: ta.participant.user.id,
+          name: ta.participant.user.name || "Unnamed",
+          avatar:
+            ta.participant.user.image || "/placeholder.svg?height=32&width=32",
+        })),
+        stateId: task.stateId,
+      })),
+    }));
 
-    return {
-      id: task.id,
-      title: task.title,
-      description: task.description,
-      status: task.status.toLowerCase(),
-      priority: task.priority.toLowerCase(),
-      dueDate: new Date(task.dueDate),
-      ...(assignees?.length && { assignees }), // s'il y a au moins un assignee
-    };
-  });
+  console.log("mappedTasks", mappedTasks);
 
   // Return the mapped tasks as JSON response
   return NextResponse.json({
-    tasks: mappedTasks,
-    participants:
-      project.participants?.map((p) => ({
+    states: mappedTasks,
+    participants: project
+      .flatMap((p) => p.participants)
+      .map((p) => ({
         id: p.user.id,
-        name: p.user.name || "Unnamed",
         avatar: p.user.image || "/placeholder.svg?height=32&width=32",
-      })) ?? [],
+        name: p.user.name || "Unnamed",
+      })),
   });
 }

@@ -14541,7 +14541,7 @@ export namespace Prisma {
   }
 
   export type StateCreateInput = {
-    id: string
+    id?: string
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -14550,7 +14550,7 @@ export namespace Prisma {
   }
 
   export type StateUncheckedCreateInput = {
-    id: string
+    id?: string
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -14577,7 +14577,7 @@ export namespace Prisma {
   }
 
   export type StateCreateManyInput = {
-    id: string
+    id?: string
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -16419,7 +16419,7 @@ export namespace Prisma {
   }
 
   export type StateCreateWithoutProjectInput = {
-    id: string
+    id?: string
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -16427,7 +16427,7 @@ export namespace Prisma {
   }
 
   export type StateUncheckedCreateWithoutProjectInput = {
-    id: string
+    id?: string
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -16565,7 +16565,7 @@ export namespace Prisma {
   }
 
   export type StateCreateWithoutTasksInput = {
-    id: string
+    id?: string
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -16573,7 +16573,7 @@ export namespace Prisma {
   }
 
   export type StateUncheckedCreateWithoutTasksInput = {
-    id: string
+    id?: string
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -17474,7 +17474,7 @@ export namespace Prisma {
   }
 
   export type StateCreateManyProjectInput = {
-    id: string
+    id?: string
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
