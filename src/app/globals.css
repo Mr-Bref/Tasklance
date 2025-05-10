@@ -124,6 +124,7 @@
   }
 
 
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -178,4 +179,13 @@
     --chart-4: 225.45 71.22% 75.75%;
     --chart-5: 0 3% 82.75%;
   }
+}
+
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  /* For Chrome, Safari, and Opera */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
