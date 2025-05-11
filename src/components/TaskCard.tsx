@@ -35,10 +35,9 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 export type TaskPriority = "low" | "medium" | "high";
 
-
 export interface TaskCardProps extends Task {
   className?: string;
-  state : string;
+  state: string;
   onStatusChange?: (id: string, stateId: string) => void;
 }
 
@@ -73,9 +72,7 @@ export function TaskCard({
     fetchTasks(projectId);
   };
 
-  const isOverdue =
-    dueDate && dueDate < new Date() && state !== "completed";
-
+  const isOverdue = dueDate && dueDate < new Date() && state !== "completed";
 
   const priorityConfig = {
     LOW: { icon: <Flag className="h-4 w-4 text-green-500" />, label: "Low" },
@@ -96,8 +93,8 @@ export function TaskCard({
     >
       <Card
         className={cn(
-          "cursor-grab active:cursor-grabbing p-3 mx-auto",
-          "w-full min-w-[300px] max-w-md transition-all hover:shadow-md",
+          "cursor-grab active:cursor-grabbing px-6 mx-auto",
+          "w-full max-w-[310px] transition-all hover:shadow-md",
           className
         )}
       >
@@ -123,14 +120,14 @@ export function TaskCard({
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="start">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                  //  onClick={() => handleStatusChange(key as TaskStatus)}
-                  >
-                    Mark task as 
-                  </DropdownMenuItem>
+              //  onClick={() => handleStatusChange(key as TaskStatus)}
+              >
+                Mark task as
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
@@ -138,7 +135,7 @@ export function TaskCard({
                     id,
                     title,
                     description,
-                    status: state,
+                    stateId: state,
                     priority,
                     dueDate,
                     assignees,
@@ -196,29 +193,30 @@ export function TaskCard({
             )}
           </div>
 
-          <div className="flex justify-between items-center w-full">
-          {assignees && assignees.length > 0 ? (
-  <div className="flex items-center gap-1.5">
-    <Avatar className="h-5 w-5">
-      <AvatarImage
-        src={assignees[0]?.avatar || "/placeholder.svg"} // Use the first assignee
-        alt={assignees[0]?.name}
-      />
-      <AvatarFallback className="text-[10px]">
-        {assignees[0]?.name.charAt(0)} {/* Display first character of the first assignee's name */}
-      </AvatarFallback>
-    </Avatar>
-    <span className="text-xs text-muted-foreground truncate max-w-[100px]">
-      {assignees[0]?.name} {/* Display the name of the first assignee */}
-    </span>
-  </div>
-) : (
-  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-    <User className="h-3 w-3" />
-    <span>Unassigned</span>
-  </div>
-)}
-
+          <div className="flex justify-between items-center w-full gap-2">
+            {assignees && assignees.length > 0 ? (
+              <div className="flex items-center gap-1.5">
+                <Avatar className="h-5 w-5">
+                  <AvatarImage
+                    src={assignees[0]?.avatar || "/placeholder.svg"} // Use the first assignee
+                    alt={assignees[0]?.name}
+                  />
+                  <AvatarFallback className="text-[10px]">
+                    {assignees[0]?.name.charAt(0)}{" "}
+                    {/* Display first character of the first assignee's name */}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-xs text-muted-foreground truncate max-w-[100px]">
+                  {assignees[0]?.name}{" "}
+                  {/* Display the name of the first assignee */}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <User className="h-3 w-3" />
+                <span>Unassigned</span>
+              </div>
+            )}
 
             {state !== "completed" ? (
               <Button

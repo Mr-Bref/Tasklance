@@ -42,6 +42,14 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+  --color-list-muted: #6c757d;
+  --color-list-primary: #0d6efd;
+  --color-list-secondary: #6c757d;
+  --color-list-success: #198754;
+  --color-list-info: #0dcaf0;
+  --color-list-warning: #ffc107;
+  --color-list-danger: #dc3545;
+  --color-list-dark: #212529;
 }
 
 :root {
@@ -77,7 +85,6 @@
   --sidebar-accent-foreground: oklch(0.7 0.1987 154.9);
   --sidebar-border: oklch(0.923 0.003 48.717);
   --sidebar-ring: oklch(0.709 0.01 56.259);
-
 }
 
 .dark {
@@ -112,7 +119,6 @@
   --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.553 0.013 58.071);
-
 }
 
 @layer base {
@@ -122,8 +128,6 @@
   body {
     @apply bg-background text-foreground;
   }
-
-
 
   :root {
     --background: 0 0% 100%;
@@ -183,9 +187,20 @@
 
 .hide-scrollbar {
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
+  -ms-overflow-style: none; /* IE and Edge */
   /* For Chrome, Safari, and Opera */
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+main {
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
 }

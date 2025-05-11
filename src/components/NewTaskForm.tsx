@@ -58,7 +58,7 @@ export function NewTaskForm({
       title: "",
       description: "",
       priority: "MEDIUM",
-      dueDate: undefined,
+      dueDate: new Date(),
     },
   });
 

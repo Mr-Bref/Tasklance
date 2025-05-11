@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { InviteDialog } from "./InviteDialog";
 import { cn } from "@/lib/utils";
+import { DeleteProject } from "@/actions/project";
 
 interface NavProjectsProps {
   projects: {
@@ -99,7 +100,12 @@ export function NavProjects({ projects, fetchProject }: NavProjectsProps) {
                     <span>Invite</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    const formData = new FormData();
+                    formData.append("id", item.id);
+                    DeleteProject(formData);
+                    fetchProject();
+                  }}>
                     <Trash2 className="text-muted-foreground" />
                     <span>Delete Project</span>
                   </DropdownMenuItem>

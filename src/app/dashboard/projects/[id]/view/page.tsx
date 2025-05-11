@@ -49,7 +49,7 @@ export default async function ProjectPage({
           </Breadcrumb>
         </div>
       </header>
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+      <div className="flex flex-1 flex-col px-6 pt-0">
         <Suspense fallback={<div>Loading...</div>}>
             <Task projectId={id} />
         </Suspense>

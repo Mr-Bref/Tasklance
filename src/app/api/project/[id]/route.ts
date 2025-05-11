@@ -25,6 +25,7 @@ export async function GET(
   // Fetch the project from the database, including tasks and task assignments
   const project = await prisma.project.findMany({
     where: {
+      id: id,
       OR: [
         {
           ownerId: userId,
@@ -56,6 +57,9 @@ export async function GET(
             },
           },
         },
+        orderBy: {
+          createdAt: "asc",
+        },
       },
       participants: {
         include: {
@@ -76,6 +80,7 @@ export async function GET(
     .map((state) => ({
       label: state.label,
       id: state.id,
+      color: state.color,
       tasks: state.tasks.map((task) => ({
         id: task.id,
         title: task.title,

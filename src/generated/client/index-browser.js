@@ -142,7 +142,8 @@ exports.Prisma.TaskScalarFieldEnum = {
   description: 'description',
   priority: 'priority',
   dueDate: 'dueDate',
-  stateId: 'stateId'
+  stateId: 'stateId',
+  color: 'color'
 };
 
 exports.Prisma.ParticipantScalarFieldEnum = {
@@ -212,7 +213,8 @@ exports.Prisma.StateScalarFieldEnum = {
   label: 'label',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  projectId: 'projectId'
+  projectId: 'projectId',
+  color: 'color'
 };
 
 exports.Prisma.SortOrder = {

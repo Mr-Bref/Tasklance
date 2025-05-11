@@ -22,6 +22,8 @@ import Column from "./Column";
 import { EditTaskDialog } from "./EditTaskDialog";
 import { createPusherClient } from "@/lib/pusher-client";
 import { Channel } from "pusher-js";
+import NewListInput from "./NewListInput";
+import createList from "@/actions/list";
 export default function Task({ projectId }: { projectId: string }) {
   const { fetchTasks, updateTaskLocally, taskStates } = useTaskContext();
 
@@ -99,35 +101,48 @@ export default function Task({ projectId }: { projectId: string }) {
 
   return (
     <>
-      <div className="container mx-auto px-4">
+      <div className="container overflow-y-hidden px-4 ">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
           onDragStart={handleDragStart}
         >
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-between items-center mb-2">
             <h1 className="text-3xl font-bold">Project Tasks</h1>
 
             {/* Edit task Dialog */}
             <EditTaskDialog />
-          </div> 
+          </div>
 
-          <div className="flex  gap-6">
+          <div className="flex space-x-2 overflow-x-scroll">
             {taskStates.map((state) => {
+             
               return (
                 <Column
                   key={state.id}
                   title={state.label}
                   tasks={state.tasks}
-                  emptyMessage="No tasks in this column"
+                  emptyMessage="No card in this list"
                   id={state.id}
                   projectId={projectId}
-                  color='muted'
+                  color={state.color ?? "gray-200"}
                 />
               );
             })}
+            <NewListInput
+            onAdd={async (name: string) => {
+              console.log("New list name:", name);
+              const formData = new FormData();
+              formData.append("name", name);
+              formData.append("projectId", projectId);
+              await createList(formData);
+              await fetchTasks(projectId);
+            }}
+          />
           </div>
+          
+
           <DragOverlay>
             {activeTaskId
               ? (() => {
@@ -135,8 +150,8 @@ export default function Task({ projectId }: { projectId: string }) {
                     .flatMap((state) => state.tasks)
                     .find((task) => task.id === activeTaskId);
                   const state = taskStates.find(
-                    (state) => state.id === task?.stateId 
-                  )
+                    (state) => state.id === task?.stateId
+                  );
                   if (!task) return null;
                   return (
                     <TaskCard

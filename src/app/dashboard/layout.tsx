@@ -8,7 +8,7 @@ export default function Page({
   return (
     <SidebarProvider>
       <TaskProvider>
-        <AppSidebar />
+        <AppSidebar/>
         <SidebarInset>{children}</SidebarInset>
       </TaskProvider>
     </SidebarProvider>

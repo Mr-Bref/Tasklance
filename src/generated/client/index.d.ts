@@ -4283,6 +4283,7 @@ export namespace Prisma {
     priority: $Enums.Priority | null
     dueDate: Date | null
     stateId: string | null
+    color: string | null
   }
 
   export type TaskMaxAggregateOutputType = {
@@ -4292,6 +4293,7 @@ export namespace Prisma {
     priority: $Enums.Priority | null
     dueDate: Date | null
     stateId: string | null
+    color: string | null
   }
 
   export type TaskCountAggregateOutputType = {
@@ -4301,6 +4303,7 @@ export namespace Prisma {
     priority: number
     dueDate: number
     stateId: number
+    color: number
     _all: number
   }
 
@@ -4312,6 +4315,7 @@ export namespace Prisma {
     priority?: true
     dueDate?: true
     stateId?: true
+    color?: true
   }
 
   export type TaskMaxAggregateInputType = {
@@ -4321,6 +4325,7 @@ export namespace Prisma {
     priority?: true
     dueDate?: true
     stateId?: true
+    color?: true
   }
 
   export type TaskCountAggregateInputType = {
@@ -4330,6 +4335,7 @@ export namespace Prisma {
     priority?: true
     dueDate?: true
     stateId?: true
+    color?: true
     _all?: true
   }
 
@@ -4412,6 +4418,7 @@ export namespace Prisma {
     priority: $Enums.Priority
     dueDate: Date
     stateId: string
+    color: string | null
     _count: TaskCountAggregateOutputType | null
     _min: TaskMinAggregateOutputType | null
     _max: TaskMaxAggregateOutputType | null
@@ -4438,6 +4445,7 @@ export namespace Prisma {
     priority?: boolean
     dueDate?: boolean
     stateId?: boolean
+    color?: boolean
     taskAssignements?: boolean | Task$taskAssignementsArgs<ExtArgs>
     state?: boolean | StateDefaultArgs<ExtArgs>
     _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
@@ -4450,6 +4458,7 @@ export namespace Prisma {
     priority?: boolean
     dueDate?: boolean
     stateId?: boolean
+    color?: boolean
     state?: boolean | StateDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
@@ -4460,6 +4469,7 @@ export namespace Prisma {
     priority?: boolean
     dueDate?: boolean
     stateId?: boolean
+    color?: boolean
     state?: boolean | StateDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
@@ -4470,9 +4480,10 @@ export namespace Prisma {
     priority?: boolean
     dueDate?: boolean
     stateId?: boolean
+    color?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "priority" | "dueDate" | "stateId", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "priority" | "dueDate" | "stateId" | "color", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     taskAssignements?: boolean | Task$taskAssignementsArgs<ExtArgs>
     state?: boolean | StateDefaultArgs<ExtArgs>
@@ -4498,6 +4509,7 @@ export namespace Prisma {
       priority: $Enums.Priority
       dueDate: Date
       stateId: string
+      color: string | null
     }, ExtArgs["result"]["task"]>
     composites: {}
   }
@@ -4929,6 +4941,7 @@ export namespace Prisma {
     readonly priority: FieldRef<"Task", 'Priority'>
     readonly dueDate: FieldRef<"Task", 'DateTime'>
     readonly stateId: FieldRef<"Task", 'String'>
+    readonly color: FieldRef<"Task", 'String'>
   }
     
 
@@ -11904,6 +11917,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     projectId: string | null
+    color: string | null
   }
 
   export type StateMaxAggregateOutputType = {
@@ -11912,6 +11926,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     projectId: string | null
+    color: string | null
   }
 
   export type StateCountAggregateOutputType = {
@@ -11920,6 +11935,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     projectId: number
+    color: number
     _all: number
   }
 
@@ -11930,6 +11946,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     projectId?: true
+    color?: true
   }
 
   export type StateMaxAggregateInputType = {
@@ -11938,6 +11955,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     projectId?: true
+    color?: true
   }
 
   export type StateCountAggregateInputType = {
@@ -11946,6 +11964,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     projectId?: true
+    color?: true
     _all?: true
   }
 
@@ -12027,6 +12046,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     projectId: string
+    color: string | null
     _count: StateCountAggregateOutputType | null
     _min: StateMinAggregateOutputType | null
     _max: StateMaxAggregateOutputType | null
@@ -12052,6 +12072,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     projectId?: boolean
+    color?: boolean
     tasks?: boolean | State$tasksArgs<ExtArgs>
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     _count?: boolean | StateCountOutputTypeDefaultArgs<ExtArgs>
@@ -12063,6 +12084,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     projectId?: boolean
+    color?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["state"]>
 
@@ -12072,6 +12094,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     projectId?: boolean
+    color?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["state"]>
 
@@ -12081,9 +12104,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     projectId?: boolean
+    color?: boolean
   }
 
-  export type StateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "label" | "createdAt" | "updatedAt" | "projectId", ExtArgs["result"]["state"]>
+  export type StateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "label" | "createdAt" | "updatedAt" | "projectId" | "color", ExtArgs["result"]["state"]>
   export type StateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tasks?: boolean | State$tasksArgs<ExtArgs>
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -12108,6 +12132,7 @@ export namespace Prisma {
       createdAt: Date | null
       updatedAt: Date | null
       projectId: string
+      color: string | null
     }, ExtArgs["result"]["state"]>
     composites: {}
   }
@@ -12538,6 +12563,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"State", 'DateTime'>
     readonly updatedAt: FieldRef<"State", 'DateTime'>
     readonly projectId: FieldRef<"State", 'String'>
+    readonly color: FieldRef<"State", 'String'>
   }
     
 
@@ -13018,7 +13044,8 @@ export namespace Prisma {
     description: 'description',
     priority: 'priority',
     dueDate: 'dueDate',
-    stateId: 'stateId'
+    stateId: 'stateId',
+    color: 'color'
   };
 
   export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -13109,7 +13136,8 @@ export namespace Prisma {
     label: 'label',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    projectId: 'projectId'
+    projectId: 'projectId',
+    color: 'color'
   };
 
   export type StateScalarFieldEnum = (typeof StateScalarFieldEnum)[keyof typeof StateScalarFieldEnum]
@@ -13379,6 +13407,7 @@ export namespace Prisma {
     priority?: EnumPriorityFilter<"Task"> | $Enums.Priority
     dueDate?: DateTimeFilter<"Task"> | Date | string
     stateId?: StringFilter<"Task"> | string
+    color?: StringNullableFilter<"Task"> | string | null
     taskAssignements?: TaskAssignementListRelationFilter
     state?: XOR<StateScalarRelationFilter, StateWhereInput>
   }
@@ -13390,6 +13419,7 @@ export namespace Prisma {
     priority?: SortOrder
     dueDate?: SortOrder
     stateId?: SortOrder
+    color?: SortOrderInput | SortOrder
     taskAssignements?: TaskAssignementOrderByRelationAggregateInput
     state?: StateOrderByWithRelationInput
   }
@@ -13404,6 +13434,7 @@ export namespace Prisma {
     priority?: EnumPriorityFilter<"Task"> | $Enums.Priority
     dueDate?: DateTimeFilter<"Task"> | Date | string
     stateId?: StringFilter<"Task"> | string
+    color?: StringNullableFilter<"Task"> | string | null
     taskAssignements?: TaskAssignementListRelationFilter
     state?: XOR<StateScalarRelationFilter, StateWhereInput>
   }, "id">
@@ -13415,6 +13446,7 @@ export namespace Prisma {
     priority?: SortOrder
     dueDate?: SortOrder
     stateId?: SortOrder
+    color?: SortOrderInput | SortOrder
     _count?: TaskCountOrderByAggregateInput
     _max?: TaskMaxOrderByAggregateInput
     _min?: TaskMinOrderByAggregateInput
@@ -13430,6 +13462,7 @@ export namespace Prisma {
     priority?: EnumPriorityWithAggregatesFilter<"Task"> | $Enums.Priority
     dueDate?: DateTimeWithAggregatesFilter<"Task"> | Date | string
     stateId?: StringWithAggregatesFilter<"Task"> | string
+    color?: StringNullableWithAggregatesFilter<"Task"> | string | null
   }
 
   export type ParticipantWhereInput = {
@@ -13852,6 +13885,7 @@ export namespace Prisma {
     createdAt?: DateTimeNullableFilter<"State"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"State"> | Date | string | null
     projectId?: StringFilter<"State"> | string
+    color?: StringNullableFilter<"State"> | string | null
     tasks?: TaskListRelationFilter
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }
@@ -13862,6 +13896,7 @@ export namespace Prisma {
     createdAt?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     projectId?: SortOrder
+    color?: SortOrderInput | SortOrder
     tasks?: TaskOrderByRelationAggregateInput
     project?: ProjectOrderByWithRelationInput
   }
@@ -13875,6 +13910,7 @@ export namespace Prisma {
     createdAt?: DateTimeNullableFilter<"State"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"State"> | Date | string | null
     projectId?: StringFilter<"State"> | string
+    color?: StringNullableFilter<"State"> | string | null
     tasks?: TaskListRelationFilter
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }, "id">
@@ -13885,6 +13921,7 @@ export namespace Prisma {
     createdAt?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     projectId?: SortOrder
+    color?: SortOrderInput | SortOrder
     _count?: StateCountOrderByAggregateInput
     _max?: StateMaxOrderByAggregateInput
     _min?: StateMinOrderByAggregateInput
@@ -13899,6 +13936,7 @@ export namespace Prisma {
     createdAt?: DateTimeNullableWithAggregatesFilter<"State"> | Date | string | null
     updatedAt?: DateTimeNullableWithAggregatesFilter<"State"> | Date | string | null
     projectId?: StringWithAggregatesFilter<"State"> | string
+    color?: StringNullableWithAggregatesFilter<"State"> | string | null
   }
 
   export type UserCreateInput = {
@@ -14050,6 +14088,7 @@ export namespace Prisma {
     description: string
     priority?: $Enums.Priority
     dueDate: Date | string
+    color?: string | null
     taskAssignements?: TaskAssignementCreateNestedManyWithoutTaskInput
     state: StateCreateNestedOneWithoutTasksInput
   }
@@ -14061,6 +14100,7 @@ export namespace Prisma {
     priority?: $Enums.Priority
     dueDate: Date | string
     stateId: string
+    color?: string | null
     taskAssignements?: TaskAssignementUncheckedCreateNestedManyWithoutTaskInput
   }
 
@@ -14070,6 +14110,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     taskAssignements?: TaskAssignementUpdateManyWithoutTaskNestedInput
     state?: StateUpdateOneRequiredWithoutTasksNestedInput
   }
@@ -14081,6 +14122,7 @@ export namespace Prisma {
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     stateId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     taskAssignements?: TaskAssignementUncheckedUpdateManyWithoutTaskNestedInput
   }
 
@@ -14091,6 +14133,7 @@ export namespace Prisma {
     priority?: $Enums.Priority
     dueDate: Date | string
     stateId: string
+    color?: string | null
   }
 
   export type TaskUpdateManyMutationInput = {
@@ -14099,6 +14142,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TaskUncheckedUpdateManyInput = {
@@ -14108,6 +14152,7 @@ export namespace Prisma {
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     stateId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ParticipantCreateInput = {
@@ -14545,6 +14590,7 @@ export namespace Prisma {
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
+    color?: string | null
     tasks?: TaskCreateNestedManyWithoutStateInput
     project: ProjectCreateNestedOneWithoutStatesInput
   }
@@ -14555,6 +14601,7 @@ export namespace Prisma {
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     projectId: string
+    color?: string | null
     tasks?: TaskUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -14563,6 +14610,7 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     tasks?: TaskUpdateManyWithoutStateNestedInput
     project?: ProjectUpdateOneRequiredWithoutStatesNestedInput
   }
@@ -14573,6 +14621,7 @@ export namespace Prisma {
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projectId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     tasks?: TaskUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -14582,6 +14631,7 @@ export namespace Prisma {
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     projectId: string
+    color?: string | null
   }
 
   export type StateUpdateManyMutationInput = {
@@ -14589,6 +14639,7 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StateUncheckedUpdateManyInput = {
@@ -14597,6 +14648,7 @@ export namespace Prisma {
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projectId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -14850,6 +14902,7 @@ export namespace Prisma {
     priority?: SortOrder
     dueDate?: SortOrder
     stateId?: SortOrder
+    color?: SortOrder
   }
 
   export type TaskMaxOrderByAggregateInput = {
@@ -14859,6 +14912,7 @@ export namespace Prisma {
     priority?: SortOrder
     dueDate?: SortOrder
     stateId?: SortOrder
+    color?: SortOrder
   }
 
   export type TaskMinOrderByAggregateInput = {
@@ -14868,6 +14922,7 @@ export namespace Prisma {
     priority?: SortOrder
     dueDate?: SortOrder
     stateId?: SortOrder
+    color?: SortOrder
   }
 
   export type EnumPriorityWithAggregatesFilter<$PrismaModel = never> = {
@@ -15166,6 +15221,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     projectId?: SortOrder
+    color?: SortOrder
   }
 
   export type StateMaxOrderByAggregateInput = {
@@ -15174,6 +15230,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     projectId?: SortOrder
+    color?: SortOrder
   }
 
   export type StateMinOrderByAggregateInput = {
@@ -15182,6 +15239,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     projectId?: SortOrder
+    color?: SortOrder
   }
 
   export type ProjectCreateNestedManyWithoutOwnerInput = {
@@ -16423,6 +16481,7 @@ export namespace Prisma {
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
+    color?: string | null
     tasks?: TaskCreateNestedManyWithoutStateInput
   }
 
@@ -16431,6 +16490,7 @@ export namespace Prisma {
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
+    color?: string | null
     tasks?: TaskUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -16540,6 +16600,7 @@ export namespace Prisma {
     createdAt?: DateTimeNullableFilter<"State"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"State"> | Date | string | null
     projectId?: StringFilter<"State"> | string
+    color?: StringNullableFilter<"State"> | string | null
   }
 
   export type TaskAssignementCreateWithoutTaskInput = {
@@ -16569,6 +16630,7 @@ export namespace Prisma {
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
+    color?: string | null
     project: ProjectCreateNestedOneWithoutStatesInput
   }
 
@@ -16578,6 +16640,7 @@ export namespace Prisma {
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     projectId: string
+    color?: string | null
   }
 
   export type StateCreateOrConnectWithoutTasksInput = {
@@ -16627,6 +16690,7 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     project?: ProjectUpdateOneRequiredWithoutStatesNestedInput
   }
 
@@ -16636,6 +16700,7 @@ export namespace Prisma {
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projectId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProjectCreateWithoutParticipantsInput = {
@@ -16802,6 +16867,7 @@ export namespace Prisma {
     description: string
     priority?: $Enums.Priority
     dueDate: Date | string
+    color?: string | null
     state: StateCreateNestedOneWithoutTasksInput
   }
 
@@ -16812,6 +16878,7 @@ export namespace Prisma {
     priority?: $Enums.Priority
     dueDate: Date | string
     stateId: string
+    color?: string | null
   }
 
   export type TaskCreateOrConnectWithoutTaskAssignementsInput = {
@@ -16855,6 +16922,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     state?: StateUpdateOneRequiredWithoutTasksNestedInput
   }
 
@@ -16865,6 +16933,7 @@ export namespace Prisma {
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     stateId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ParticipantUpsertWithoutTaskAssignementsInput = {
@@ -17162,6 +17231,7 @@ export namespace Prisma {
     description: string
     priority?: $Enums.Priority
     dueDate: Date | string
+    color?: string | null
     taskAssignements?: TaskAssignementCreateNestedManyWithoutTaskInput
   }
 
@@ -17171,6 +17241,7 @@ export namespace Prisma {
     description: string
     priority?: $Enums.Priority
     dueDate: Date | string
+    color?: string | null
     taskAssignements?: TaskAssignementUncheckedCreateNestedManyWithoutTaskInput
   }
 
@@ -17231,6 +17302,7 @@ export namespace Prisma {
     priority?: EnumPriorityFilter<"Task"> | $Enums.Priority
     dueDate?: DateTimeFilter<"Task"> | Date | string
     stateId?: StringFilter<"Task"> | string
+    color?: StringNullableFilter<"Task"> | string | null
   }
 
   export type ProjectUpsertWithoutStatesInput = {
@@ -17478,6 +17550,7 @@ export namespace Prisma {
     label: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
+    color?: string | null
   }
 
   export type ParticipantUpdateWithoutProjectInput = {
@@ -17538,6 +17611,7 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     tasks?: TaskUpdateManyWithoutStateNestedInput
   }
 
@@ -17546,6 +17620,7 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     tasks?: TaskUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -17554,6 +17629,7 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TaskAssignementCreateManyTaskInput = {
@@ -17610,6 +17686,7 @@ export namespace Prisma {
     description: string
     priority?: $Enums.Priority
     dueDate: Date | string
+    color?: string | null
   }
 
   export type TaskUpdateWithoutStateInput = {
@@ -17618,6 +17695,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     taskAssignements?: TaskAssignementUpdateManyWithoutTaskNestedInput
   }
 
@@ -17627,6 +17705,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     taskAssignements?: TaskAssignementUncheckedUpdateManyWithoutTaskNestedInput
   }
 
@@ -17636,6 +17715,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

@@ -20,7 +20,7 @@ import { PlusIcon } from "lucide-react"
     return (
       <Dialog  open={open} onOpenChange={onOpenChange}>
         <DialogTrigger asChild>
-          <Button variant="outline" className="text-black hover:cursor-pointer rounded-none w-full"><PlusIcon /> New Task</Button>
+          <Button variant="outline" className="text-black hover:cursor-pointer rounded-none w-full mb-2"><PlusIcon /> New Task</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[500px] top-10 sm:top-10 translate-y-0">
           <DialogHeader>

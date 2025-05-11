@@ -1,7 +1,6 @@
 "use client";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { getTasksById } from "@/data/Project"; // Adjust the import based on your actual data fetching logic
-import { TaskProps, TaskStatus } from "@/components/TaskCard"; // Assuming TaskProps is the correct type for tasks
 
 export type UserPreview = {
   id: string;
@@ -18,6 +17,7 @@ export interface TaskState {
   label: string;
   id: string;
   tasks: Task[];
+  color?: string;
 }
 
 export interface Task {
@@ -33,10 +33,10 @@ export interface Task {
 interface TaskContextType {
   taskStates: TaskState[];
   fetchTasks: (projectId: string) => Promise<void>;
-  updateTaskLocally: (id: string, newStatus: TaskStatus) => Promise<void>;
-  setTaskStates: React.Dispatch<React.SetStateAction<TaskData[]>>;
-  taskBeingEdited: TaskProps | null;
-  setTaskBeingEdited: (task: TaskProps | null) => void;
+  updateTaskLocally: (id: string, newStatus: string) => Promise<void>;
+  setTaskStates: React.Dispatch<React.SetStateAction<TaskState[]>>;
+  taskBeingEdited: Task | null;
+  setTaskBeingEdited: (task: Task | null) => void;
   isEditDialogOpen: boolean;
   setIsEditDialogOpen: (open: boolean) => void;
   participants: UserPreview[]
@@ -45,9 +45,9 @@ interface TaskContextType {
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const [taskStates, setTaskStates] = useState<TaskData[]>([]);
+  const [taskStates, setTaskStates] = useState<TaskState[]>([]);
   const [participants, setParticipants] = useState<UserPreview[]>([]);
-  const [taskBeingEdited, setTaskBeingEdited] = useState<TaskProps | null>(null);
+  const [taskBeingEdited, setTaskBeingEdited] = useState<Task | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const fetchTasks = async (projectId: string) => {
@@ -58,7 +58,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     setParticipants(data.participants);
   };
 
-  const updateTaskLocally = async (id: string, newStatus: TaskStatus) => {
+  const updateTaskLocally = async (id: string, newStatus: string) => {
    
   };
 
