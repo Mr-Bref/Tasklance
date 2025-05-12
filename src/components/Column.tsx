@@ -15,8 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { ColorPicker } from "./ColorPicker";
-import { updateListColor } from "@/actions/list";
+import { duplicateList, updateListColor } from "@/actions/list";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 type ColumnProps = {
   title: string;
@@ -54,6 +55,19 @@ export function Column({
       });
   };
 
+  const handleDuplicateList = () => {
+    const formData = new FormData();
+    formData.append("id", id);
+    duplicateList(formData)
+      .then(() => {
+        fetchTasks(projectId);
+        console.log("List duplicated");
+      })
+      .catch((error) => {
+        console.error("Error duplicating list:", error);
+        toast.error("Error duplicating list");
+      });
+  }
   return (
     <div className="min-w-[310px] w-[310px] space-y-2 overflow-x-hidden">
       <h2 className="text-lg font-semibold flex items-center gap-2 justify-between">
@@ -81,19 +95,19 @@ export function Column({
               <Plus className="mr-2 h-4 w-4" />
               Add Task
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log(`Edit column ${id}`)}>
+            <DropdownMenuItem onClick={()=> console.log(`Edit column ${id}`)}>
               Edit List
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => console.log(`Delete column ${id}`)}
+              onClick={handleDuplicateList}
             >
               Duplicate List
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => console.log(`Move column ${id}`)}>
-              Move List
+              Move List to
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => console.log(`Move column ${id}`)}>
-              Copy List
+              Copy List to
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => console.log(`Archive column ${id}`)}
