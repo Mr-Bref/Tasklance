@@ -64,7 +64,7 @@ export function NavProjects({ projects, fetchProject }: NavProjectsProps) {
                   className={cn(
                     "cursor-pointer py-5 text-lg font-medium", 
                     isActive && "bg-muted text-green-500"
-                  )}
+                  )} 
                 >
                   {item.name}
                 </Link>
