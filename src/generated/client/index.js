@@ -277,7 +277,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://postgres.cbszmzblojcuestaazxl:marihabaderomou@aws-0-eu-central-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+        "value": "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMTViOTU4N2ItOWEzNy00ZTJkLThkM2ItM2I3ODQ3OTNmYTIzIiwidGVuYW50X2lkIjoiY2Y5YjMzYTczYmE2ZTZhM2ZjMTEzNThjZTM0MjE5OGUyZTk2OTQ0MTNiMzJjM2YxOTRlNzFkNTg4YTA1MmI3OCIsImludGVybmFsX3NlY3JldCI6IjQzYjM1YmRmLWFlMzktNGY5OS1hOGJiLWNkZGEzN2YwN2FjYSJ9.TIT3dtJ_BEw7GVs4Ap0zXtFsH1JebdfJ7L_pgGqt05E"
       }
     }
   },
