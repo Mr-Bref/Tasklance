@@ -22,14 +22,14 @@ export async function createProject(formData: FormData) {
     },
   });
 
-  const backlog = await prisma.state.create({
+   await prisma.state.create({
     data: {
       label: "Backlog",
       projectId: project.id,
     },
   });
 
-  const completed = await prisma.state.create({
+   await prisma.state.create({
     data: {
       label: "Completed",
       projectId: project.id,

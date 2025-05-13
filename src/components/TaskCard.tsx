@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { format } from "date-fns";
 import {
   AlertCircle,
@@ -45,13 +45,11 @@ export function TaskCard({
   id,
   title,
   description,
-  stateId,
   state,
   priority,
   dueDate,
   assignees,
   className,
-  onStatusChange,
 }: TaskCardProps) {
   const { fetchTasks, setIsEditDialogOpen, setTaskBeingEdited } =
     useTaskContext();

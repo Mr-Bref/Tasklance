@@ -27,11 +27,6 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -79,22 +74,6 @@ const priorityConfig = {
   high: { label: "High", color: "bg-rose-500" },
 };
 
-const statusConfig = {
-  todo: { label: "To Do", icon: <ClipboardList className="h-3.5 w-3.5" /> },
-  inprogress: { label: "In Progress", icon: <Clock className="h-3.5 w-3.5" /> },
-  completed: {
-    label: "Completed",
-    icon: <CheckCircle2 className="h-3.5 w-3.5" />,
-  },
-  canceled: {
-    label: "Canceled",
-    icon: <AlertCircle className="h-3.5 w-3.5" />,
-  },
-  reviewed: {
-    label: "Reviewed",
-    icon: <CheckCircle2 className="h-3.5 w-3.5" />,
-  },
-};
 
 export function EditTaskDialog() {
   const [activeTab, setActiveTab] = useState("details");
