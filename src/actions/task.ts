@@ -37,9 +37,9 @@ export async function createTask(data: CreateTaskInput) {
     },
   });
 
-  await pusherServer.trigger("private-project-" + projectId, "new-task-event", {
-    message: "Yo user!",
-  });
+  // await pusherServer.trigger("private-project-" + projectId, "new-task-event", {
+  //   message: "Yo user!",
+  // });
 }
 
 export async function updateTaskStatus(taskId: string, stateId: string) {
@@ -63,13 +63,13 @@ export async function updateTaskStatus(taskId: string, stateId: string) {
 
   const projectId = updatedTask.state.project.id;
 
-  void pusherServer.trigger(
-    "private-project-" + projectId,
-    "task-update-event",
-    {
-      message: "Yo user!",
-    }
-  );
+  // void pusherServer.trigger(
+  //   "private-project-" + projectId,
+  //   "task-update-event",
+  //   {
+  //     message: "Yo user!",
+  //   }
+  // );
   return projectId;
 }
 
