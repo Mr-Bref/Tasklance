@@ -59,7 +59,7 @@ const TaskSchema = z.object({
   description: z.string().optional(),
   priority: z.enum(["low", "medium", "high"]),
   dueDate: z.date({ required_error: "A due date is required" }),
-  status: z.enum(["todo", "inprogress", "completed", "canceled", "reviewed"]),
+  stateId: z.string(),
   assignees: z
     .array(
       z.object({
@@ -105,6 +105,7 @@ export function EditTaskDialog() {
     setIsEditDialogOpen,
     fetchTasks,
     participants,
+    taskStates ,
   } = useTaskContext();
 
   const form = useForm<TaskFormValues>({
@@ -113,7 +114,7 @@ export function EditTaskDialog() {
       title: "",
       description: "",
       priority: "medium",
-      status: "todo",
+      stateId: "",
       dueDate: undefined,
       assignees: [],
     },
@@ -126,7 +127,7 @@ export function EditTaskDialog() {
         description: taskBeingEdited.description ?? "",
         priority:
           taskBeingEdited.priority.toLowerCase() as TaskFormValues["priority"],
-        status: taskBeingEdited.status,
+        stateId: taskBeingEdited.stateId,
         dueDate: taskBeingEdited.dueDate
           ? new Date(taskBeingEdited.dueDate)
           : undefined,
@@ -151,7 +152,6 @@ export function EditTaskDialog() {
         <DialogHeader className="px-4 pt-3">
           <DialogTitle>Edit Task</DialogTitle>
         </DialogHeader>
-        
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-3 w-full rounded-none border-b">
@@ -250,81 +250,33 @@ export function EditTaskDialog() {
                   />
                 </TabsContent>
 
-                <TabsContent value="schedule" className="mt-0 space-y-3">
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Status</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select status" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {Object.entries(statusConfig).map(
-                              ([value, config]) => (
-                                <SelectItem
-                                  key={value}
-                                  value={value}
-                                  className="flex items-center"
-                                >
-                                  <div className="flex items-center">
-                                    {config.icon}
-                                    <span className="ml-2">{config.label}</span>
-                                  </div>
-                                </SelectItem>
-                              )
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="dueDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Due Date</FormLabel>
-                        <Popover modal={true}>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value
-                                  ? format(field.value, "PPP")
-                                  : "Pick a date"}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </TabsContent>
+                <FormField
+                  control={form.control}
+                  name="stateId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {taskStates.map((state) => (
+                            <SelectItem key={state.id} value={state.id}>
+                              {state.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <TabsContent value="assignees" className="mt-0">
                   <FormField
