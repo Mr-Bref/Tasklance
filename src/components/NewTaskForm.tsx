@@ -92,23 +92,20 @@ export function NewTaskForm({
     onOpenChange(false); // Close the form dialog
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-      e.preventDefault();
-      handleSubmit(onSubmit)();
-    }
-  };
-
-  // Attach the keydown event listener
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleSubmit, onSubmit]);
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault(); // empêcher le comportement natif
+        }}
+        onKeyDown={(e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+            handleSubmit(onSubmit)();
+          }
+        }}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="title"
