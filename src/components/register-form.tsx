@@ -1,16 +1,24 @@
 "use client";
-
-import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "./ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
+import { useSearchParams } from "next/navigation";
+import { Input } from "./ui/input";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
 
-export   function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+export function RegisterForm({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
 
@@ -25,10 +33,11 @@ export   function LoginForm({ className, ...props }: React.ComponentProps<"div">
   const onSubmit = async (data: any) => {
     setErrorMsg("");
     try {
-      const { error } = await authClient.signIn.email(
+      const { error } = await authClient.signUp.email(
         {
           email: data.email,
           password: data.password,
+          name: data.name,
         },
         {
           onRequest: () => {},
@@ -36,19 +45,19 @@ export   function LoginForm({ className, ...props }: React.ComponentProps<"div">
             window.location.href = callbackUrl;
           },
           onError: (ctx) => {
-            setErrorMsg(ctx.error?.message || "Login failed.");
+            setErrorMsg(ctx.error?.message || "Registration failed.");
           },
         }
       );
       if (error) {
-        setErrorMsg(error.message || "Login failed.");
+        setErrorMsg(error.message || "Registration failed.");
       }
     } catch (err: any) {
       setErrorMsg(err.message || "Unexpected error.");
     }
   };
 
-  const handleSocialLogin = async (provider: "google") => {
+  const handleSocialRegister = async (provider: "google") => {
     try {
       const { error } = await authClient.signIn.social(
         { provider, callbackURL: callbackUrl },
@@ -77,12 +86,29 @@ export   function LoginForm({ className, ...props }: React.ComponentProps<"div">
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="bg-green-50">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardTitle className="text-xl">Welcome</CardTitle>
+          <CardDescription>Create your account</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6">
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
+              <Input
+                type="text"
+                placeholder="Full name"
+                {...register("name", {
+                  required: "Name is required",
+                  maxLength: 80,
+                })}
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm">
+                  {typeof errors.name?.message === "string" ? errors.name.message : null}
+                </p>
+              )}
+
               <Input
                 type="email"
                 placeholder="Email"
@@ -94,12 +120,11 @@ export   function LoginForm({ className, ...props }: React.ComponentProps<"div">
                   },
                 })}
               />
-              {errors.email && (
+               {errors.email && (
                 <p className="text-red-500 text-sm">
                   {typeof errors.email?.message === "string" ? errors.email.message : null}
                 </p>
               )}
-
               <Input
                 type="password"
                 placeholder="Password"
@@ -123,10 +148,10 @@ export   function LoginForm({ className, ...props }: React.ComponentProps<"div">
                 {isSubmitting ? (
                   <div className="flex items-center justify-center gap-2">
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    Signing in...
+                    Creating account...
                   </div>
                 ) : (
-                  "Sign In"
+                  "Create Account"
                 )}
               </Button>
             </form>
@@ -136,15 +161,15 @@ export   function LoginForm({ className, ...props }: React.ComponentProps<"div">
             <Button
               variant="outline"
               className="w-full bg-green-50"
-              onClick={() => handleSocialLogin("google")}
+              onClick={() => handleSocialRegister("google")}
             >
-              Sign in with Google
+              Sign up with Google
             </Button>
 
             <div className="text-center text-sm">
-              Don’t have an account?{" "}
-              <Link href="/register" className="underline">
-                Create one
+              Already have an account?{" "}
+              <Link href="/login" className="underline">
+                Log in
               </Link>
             </div>
           </div>
@@ -153,8 +178,14 @@ export   function LoginForm({ className, ...props }: React.ComponentProps<"div">
 
       <div className="text-muted-foreground text-center text-xs">
         By continuing, you agree to our{" "}
-        <a href="#" className="underline underline-offset-4">Terms of Service</a> and{" "}
-        <a href="#" className="underline underline-offset-4">Privacy Policy</a>.
+        <a href="#" className="underline underline-offset-4">
+          Terms of Service
+        </a>{" "}
+        and{" "}
+        <a href="#" className="underline underline-offset-4">
+          Privacy Policy
+        </a>
+        .
       </div>
     </div>
   );
