@@ -119,7 +119,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <SidebarMenuButton
-                className="py-6 px-2 hover:cursor-pointer hover:text-dark rounded-none bg-green-400 hover:bg-green-300 font-semibold"
+                className="px-2 hover:cursor-pointer hover:text-dark rounded-none bg-green-400 hover:bg-green-300 font-semibold"
                   tooltip="New Project"
                 >
                   <PlusCircleIcon />
