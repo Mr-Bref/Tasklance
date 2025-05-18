@@ -38,7 +38,7 @@ const NewListInput: React.FC<NewListInputProps> = ({ onAdd }) => {
                 placeholder="Enter new list name"
                 className=''
             />
-            <Button className='mt-2' onClick={handleAddClick} >Add List</Button>
+            <Button className='mt-2 cursor-pointer' onClick={handleAddClick} >Add List</Button>
         </div>
     );
 };
