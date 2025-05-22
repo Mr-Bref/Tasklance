@@ -39,7 +39,8 @@ export function Column({
   const { isOver, setNodeRef } = useDroppable({ id: id });
 
   const [formOpen, setFormOpen] = useState(false);
-  const { fetchTasks } = useTaskContext();
+  const { fetchTasks, setIsStateDialogOpen, setAction, setStateBeingEdited } =
+    useTaskContext();
 
   const onselect = (color: string) => {
     const formData = new FormData();
@@ -67,7 +68,30 @@ export function Column({
         console.error("Error duplicating list:", error);
         toast.error("Error duplicating list");
       });
-  }
+  };
+
+  const handleCopyList = () => {
+    setAction("copyState");
+    setStateBeingEdited({
+      color,
+      tasks,
+      id,
+      label: title,
+    });
+    setIsStateDialogOpen(true);
+  };
+
+  const handleMoveList = () => {
+    setAction("moveState");
+    setStateBeingEdited({
+      color,
+      tasks,
+      id,
+      label: title,
+    });
+    setIsStateDialogOpen(true);
+  };
+
   return (
     <div className="min-w-[310px] w-[310px] space-y-2 overflow-x-hidden">
       <h2 className="text-lg font-semibold flex items-center gap-2 justify-between">
@@ -95,18 +119,16 @@ export function Column({
               <Plus className="mr-2 h-4 w-4" />
               Add Task
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={()=> console.log(`Edit column ${id}`)}>
+            <DropdownMenuItem onClick={() => console.log(`Edit column ${id}`)}>
               Edit List
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleDuplicateList}
-            >
+            <DropdownMenuItem onClick={handleDuplicateList}>
               Duplicate List
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log(`Move column ${id}`)}>
+            <DropdownMenuItem onClick={handleMoveList}>
               Move List to
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log(`Move column ${id}`)}>
+            <DropdownMenuItem onClick={handleCopyList}>
               Copy List to
             </DropdownMenuItem>
             <DropdownMenuItem

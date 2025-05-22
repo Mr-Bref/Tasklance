@@ -82,3 +82,57 @@ export async function duplicateList(formData: FormData) {
 
   return { list: newList, tasks: newTasks };
 }
+
+export async function copyToState(formData: FormData) {
+  const fromStateId = formData.get("fromStateId") as string;
+  const toStateId = formData.get("toStateId") as string;
+
+  if (!fromStateId || !toStateId)
+    throw new Error("Both state IDs are required");
+
+  const tasks = await prisma.task.findMany({
+    where: { stateId: fromStateId },
+  });
+
+  if (!tasks.length) return { copied: 0 };
+
+  const state = await prisma.state.findFirst({
+    where: {
+      id: toStateId,
+    },
+  });
+
+  await prisma.task.createMany({
+    data: tasks.map((task) => ({
+      title: task.title,
+      description: task.description,
+      dueDate: task.dueDate,
+      priority: task.priority,
+      color: task.color,
+      stateId: toStateId,
+    })),
+  });
+
+  return { copied: tasks.length, projectId: state?.projectId };
+}
+
+export async function moveToState(formData: FormData) {
+  const fromStateId = formData.get("fromStateId") as string;
+  const toStateId = formData.get("toStateId") as string;
+
+  if (!fromStateId || !toStateId)
+    throw new Error("Both state IDs are required");
+
+  const state = await prisma.state.findFirst({
+    where: {
+      id: toStateId,
+    },
+  });
+
+  const updatedTasks = await prisma.task.updateMany({
+    where: { stateId: fromStateId },
+    data: { stateId: toStateId },
+  });
+
+  return { moved: updatedTasks.count, projectId: state?.projectId };
+}

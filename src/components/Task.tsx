@@ -23,6 +23,8 @@ import { createPusherClient } from "@/lib/pusher-client";
 import { Channel } from "pusher-js";
 import NewListInput from "./NewListInput";
 import createList from "@/actions/list";
+import { StateDialog } from "./StateDialog";
+
 export default function Task({ projectId }: { projectId: string }) {
   const { fetchTasks, updateTaskLocally, taskStates } = useTaskContext();
 
@@ -93,8 +95,8 @@ export default function Task({ projectId }: { projectId: string }) {
     const taskId = active.id as string;
     const newStatus = over.id as string;
 
-    updateTaskStatus(taskId, newStatus).then(() => {
-      updateTaskLocally(taskId, newStatus);
+    updateTaskStatus(taskId, newStatus).then((projectId) => {
+      fetchTasks(projectId);
     });
   }
 
@@ -109,14 +111,23 @@ export default function Task({ projectId }: { projectId: string }) {
         >
           <div className="flex justify-between items-center mb-2">
             <h1 className="text-3xl font-bold">Project Tasks</h1>
+            <span>
+              {/* board an table view butttons */}
+              <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l">
+                Board
+              </button>
+              <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r">
+                Table
+              </button>
+            </span>
 
             {/* Edit task Dialog */}
             <EditTaskDialog />
+            <StateDialog />
           </div>
 
           <div className="flex space-x-2 overflow-x-scroll">
             {taskStates.map((state) => {
-             
               return (
                 <Column
                   key={state.id}
@@ -130,17 +141,16 @@ export default function Task({ projectId }: { projectId: string }) {
               );
             })}
             <NewListInput
-            onAdd={async (name: string) => {
-              console.log("New list name:", name);
-              const formData = new FormData();
-              formData.append("name", name);
-              formData.append("projectId", projectId);
-              await createList(formData);
-              await fetchTasks(projectId);
-            }}
-          />
+              onAdd={async (name: string) => {
+                console.log("New list name:", name);
+                const formData = new FormData();
+                formData.append("name", name);
+                formData.append("projectId", projectId);
+                await createList(formData);
+                await fetchTasks(projectId);
+              }}
+            />
           </div>
-          
 
           <DragOverlay>
             {activeTaskId

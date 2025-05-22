@@ -63,13 +63,13 @@ export async function updateTaskStatus(taskId: string, stateId: string) {
 
   const projectId = updatedTask.state.project.id;
 
-  void pusherServer.trigger(
-    "private-project-" + projectId,
-    "task-update-event",
-    {
-      message: "Yo user!",
-    }
-  );
+  // void pusherServer.trigger(
+  //   "private-project-" + projectId,
+  //   "task-update-event",
+  //   {
+  //     message: "Yo user!",
+  //   }
+  // );
   return projectId;
 }
 

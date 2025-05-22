@@ -23,8 +23,8 @@ export interface TaskState {
 export interface Task {
   id: string;
   title: string;
-  description: string ;
-  priority: 'LOW' | 'MEDIUM' | 'HIGHT';
+  description: string;
+  priority: "LOW" | "MEDIUM" | "HIGHT";
   dueDate: Date;
   assignees: UserPreview[];
   stateId: string;
@@ -37,9 +37,15 @@ interface TaskContextType {
   setTaskStates: React.Dispatch<React.SetStateAction<TaskState[]>>;
   taskBeingEdited: Task | null;
   setTaskBeingEdited: (task: Task | null) => void;
+  stateBeingEdited: TaskState | null;
+  setStateBeingEdited: (task: TaskState | null) => void;
   isEditDialogOpen: boolean;
   setIsEditDialogOpen: (open: boolean) => void;
-  participants: UserPreview[]
+  isStateDialogOpen: boolean;
+  setIsStateDialogOpen: (open: boolean) => void;
+  participants: UserPreview[];
+  action: "copyState" | "moveState";
+  setAction: (action: "copyState" | "moveState") => void;
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -48,20 +54,20 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [taskStates, setTaskStates] = useState<TaskState[]>([]);
   const [participants, setParticipants] = useState<UserPreview[]>([]);
   const [taskBeingEdited, setTaskBeingEdited] = useState<Task | null>(null);
+  const [stateBeingEdited, setStateBeingEdited] = useState<TaskState | null>(
+    null
+  );
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isStateDialogOpen, setIsStateDialogOpen] = useState(false);
+  const [action, setAction] = useState<"copyState" | "moveState">("copyState");
 
   const fetchTasks = async (projectId: string) => {
     const data = await getTasksById(projectId);
-    console.log('data');
-    console.log(data);
     setTaskStates(data.states);
     setParticipants(data.participants);
   };
 
-  const updateTaskLocally = async (id: string, newStatus: string) => {
-   
-  };
-
+  const updateTaskLocally = async (id: string, newStatus: string) => {};
 
   return (
     <TaskContext.Provider
@@ -72,9 +78,15 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         updateTaskLocally,
         taskBeingEdited,
         setTaskBeingEdited,
+        stateBeingEdited,
+        setStateBeingEdited,
         isEditDialogOpen,
         setIsEditDialogOpen,
         participants,
+        isStateDialogOpen,
+        setIsStateDialogOpen,
+        action,
+        setAction,
       }}
     >
       {children}
