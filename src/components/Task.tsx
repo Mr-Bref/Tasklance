@@ -24,8 +24,9 @@ import { Channel } from "pusher-js";
 import NewListInput from "./NewListInput";
 import createList from "@/actions/list";
 import { StateDialog } from "./StateDialog";
+import ViewToggler from "./ViewToggler";
 
-export default function Task({ projectId }: { projectId: string }) {
+export default function Task({ projectId,projectName }: { projectId: string, projectName:string }) {
   const { fetchTasks, updateTaskLocally, taskStates } = useTaskContext();
 
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
@@ -110,16 +111,8 @@ export default function Task({ projectId }: { projectId: string }) {
           onDragStart={handleDragStart}
         >
           <div className="flex justify-between items-center mb-2">
-            <h1 className="text-3xl font-bold">Project Tasks</h1>
-            <span>
-              {/* board an table view butttons */}
-              <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l">
-                Board
-              </button>
-              <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r">
-                Table
-              </button>
-            </span>
+            <h1 className="text-3xl font-bold">{ projectName}</h1>
+            <ViewToggler projectId={projectId} />
 
             {/* Edit task Dialog */}
             <EditTaskDialog />

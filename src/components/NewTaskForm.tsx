@@ -96,9 +96,7 @@ export function NewTaskForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={(e) => {
-          e.preventDefault(); // empêcher le comportement natif
-        }}
+        onSubmit={handleSubmit(onSubmit)}
         onKeyDown={(e) => {
           if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
             handleSubmit(onSubmit)();

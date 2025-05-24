@@ -13,11 +13,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "TaskLance",
-  description: "A task management app",
-};
-
+export const metadata = {
+  title: "Tasklance - Task Management Made Simple",
+  description:
+    "Organize projects, streamline processes, and hit deadlines with our intuitive task management platform.",
+}
 export default function RootLayout({
   children,
 }: Readonly<{

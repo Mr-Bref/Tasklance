@@ -51,7 +51,7 @@ export default async function ProjectPage({
       </header>
       <div className="flex flex-1 flex-col px-6 pt-0">
         <Suspense fallback={<h1>Loading...</h1>}>
-            <Task projectId={id} />
+            <Task projectId={id} projectName={project?.name || ''} />
         </Suspense>
       </div>
     </div>

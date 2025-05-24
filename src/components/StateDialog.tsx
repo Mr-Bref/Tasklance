@@ -56,7 +56,7 @@ export function StateDialog() {
 
   return (
     <Dialog open={isStateDialogOpen} onOpenChange={setIsStateDialogOpen}>
-      <DialogContent>
+      <DialogContent className="top-10 translate-y-0">
         <DialogHeader>
           <DialogTitle>Choose a List</DialogTitle>
         </DialogHeader>
