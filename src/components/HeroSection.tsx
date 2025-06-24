@@ -164,17 +164,17 @@ export function HeroSection() {
             <Image src="https://res.cloudinary.com/ddonnbywt/image/upload/v1750737477/losucbo8vktvemve8sj0.png" alt="Company logo" width={120} height={40} />
           </div>
           <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
-            <Image src="/placeholder.svg?height=40&width=120" alt="Company logo" width={120} height={40} />
+            <Image src="https://res.cloudinary.com/ddonnbywt/image/upload/v1750737477/axb9muphhzadkrfotevy.png" alt="Company logo" width={120} height={40} />
           </div>
           <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
-            <Image src="/placeholder.svg?height=40&width=120" alt="Company logo" width={120} height={40} />
+            <Image src="https://res.cloudinary.com/ddonnbywt/image/upload/v1750737477/lk2aiuu0cqhwprewftxa.png" alt="Company logo" width={120} height={40} />
           </div>
           <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
-            <Image src="/placeholder.svg?height=40&width=120" alt="Company logo" width={120} height={40} />
+            <Image src="https://res.cloudinary.com/ddonnbywt/image/upload/v1750737476/be5mrjhqzlbsobu6gfv7.png" alt="Company logo" width={120} height={40} />
           </div>
-          <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
+          {/* <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
             <Image src="/placeholder.svg?height=40&width=120" alt="Company logo" width={120} height={40} />
-          </div>
+          </div> */}
         </motion.div>
       </div>
     </section>
