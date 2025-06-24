@@ -161,7 +161,7 @@ export function HeroSection() {
           transition={{ duration: 0.7, delay: 1.1 }}
         >
           <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
-            <Image src="/placeholder.svg?height=40&width=120" alt="Company logo" width={120} height={40} />
+            <Image src="https://res.cloudinary.com/ddonnbywt/image/upload/v1750737477/losucbo8vktvemve8sj0.png" alt="Company logo" width={120} height={40} />
           </div>
           <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
             <Image src="/placeholder.svg?height=40&width=120" alt="Company logo" width={120} height={40} />
