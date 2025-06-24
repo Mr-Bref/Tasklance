@@ -60,7 +60,7 @@ export function HeroSection() {
               animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
               transition={{ duration: 0.7, delay: 0.5 }}
             >
-              <Button size="lg" className="bg-gradient-to-r from-green-500 to-emerald-600 text-white">
+              <Button size="lg" className="bg-gradient-to-r from-green-500 to-emerald-600 text-white cursor-pointer">
                 <a href="/register">Get Started Free</a>
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
