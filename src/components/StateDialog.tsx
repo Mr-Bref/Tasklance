@@ -61,11 +61,13 @@ export function StateDialog() {
           <DialogTitle>Choose a List</DialogTitle>
         </DialogHeader>
 
-        <StateList
+       <div className="min-h-[300px]">
+         <StateList
           states={taskStates}
           onSelect={handleSelect}
           selectedId={stateBeingEdited?.id}
         />
+       </div>
       </DialogContent>
     </Dialog>
   );

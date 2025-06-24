@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"; // Utilitaire pour les classes conditionnelles
 
 export function StateList({
   states,
-  onSelect,
+  onSelect, 
   selectedId,
 }: {
   states: TaskState[];
@@ -29,3 +29,4 @@ export function StateList({
     </div>
   );
 }
+ 
