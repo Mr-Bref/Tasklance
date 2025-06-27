@@ -5,7 +5,7 @@ import { useEffect } from "react";
 export default function ViewToggler({ projectId }: { projectId: string }) {
 
   return (
-    <span>
+    <span className="text-xs">
       {/* board an table view butttons */}
       <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l">
         Board

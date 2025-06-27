@@ -69,6 +69,10 @@ const config: Config = {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "Consolas", "monospace"],
       },
+      fontSize: {
+                '2xl': '1.75rem',
+                '3xl': '2rem',
+            },
       keyframes: {
         "accordion-down": {
           from: {

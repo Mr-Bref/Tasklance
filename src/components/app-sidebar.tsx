@@ -159,13 +159,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={projects} fetchProject={fetchProjects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser
-          user={{
-            name: user.name,
-            email: user.email,
-            avatar: user.image as string,
-          }}
-        />
+      
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
