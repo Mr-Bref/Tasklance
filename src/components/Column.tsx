@@ -93,8 +93,8 @@ export function Column({
   };
 
   return (
-    <div className="min-w-[310px] w-[310px] space-y-2 overflow-x-hidden">
-      <h2 className="text-lg font-semibold flex items-center gap-2 justify-between">
+    <div className="min-w-[260px] w-[260px] space-y-2 overflow-x-hidden">
+      <h2 className="text-md font-semibold flex items-center gap-2 justify-between">
         <span>
           <span
             className={`inline-block w-3 h-3 rounded-full bg-${color}`}
@@ -148,7 +148,7 @@ export function Column({
       <div
         ref={setNodeRef}
         className={cn(
-          "space-y-3 border-gray-200 rounded-md overflow-y-auto overflow-x-hidden max-h-[calc(100vh-200px)] hide-scrollbar border-2 p-4 flex flex-col items-center transition-all duration-300 scroll-p-2 px-2",
+          "space-y-2 border-gray-200 rounded-md overflow-y-auto overflow-x-hidden max-h-[calc(100vh-200px)] hide-scrollbar border-2 p-2 flex flex-col items-center transition-all duration-300 scroll-p-2",
           `bg-${color}`, // Dynamic background color based on the `color` variable
           isOver && "border-blue-500 bg-blue-100", // Conditional classes when `isOver` is true
           !isOver && "border-gray-200" // Conditional class for when `isOver` is false
@@ -158,7 +158,7 @@ export function Column({
           <TaskCard key={task.id} {...task} state={title} />
         ))}
         {tasks.length === 0 && (
-          <p className="text-sm text-muted-foreground p-4 text-center border border-dashed rounded-lg">
+          <p className="text-sm  px-4 py-4 mx-auto gap-2 text-muted-foreground p-4 text-center border border-dashed rounded-lg">
             {emptyMessage}
           </p>
         )}

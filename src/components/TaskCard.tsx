@@ -91,7 +91,7 @@ export function TaskCard({
     >
       <Card
         className={cn(
-          "cursor-grab active:cursor-grabbing px-6 mx-auto",
+          "cursor-grab active:cursor-grabbing px-4 py-3 mx-auto gap-2",
           "w-full max-w-[310px] transition-all hover:shadow-md",
           className
         )}

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
@@ -18,6 +18,7 @@ export const metadata = {
   description:
     "Organize projects, streamline processes, and hit deadlines with our intuitive task management platform.",
 }
+
 export default function RootLayout({
   children,
 }: Readonly<{

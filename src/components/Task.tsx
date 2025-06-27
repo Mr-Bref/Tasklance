@@ -101,6 +101,10 @@ export default function Task({ projectId,projectName }: { projectId: string, pro
     });
   }
 
+  if (!taskStates) {
+    return <div>Loarding</div>
+  }
+
   return (
     <>
       <div className="container overflow-y-hidden px-4 ">
@@ -110,8 +114,8 @@ export default function Task({ projectId,projectName }: { projectId: string, pro
           onDragEnd={handleDragEnd}
           onDragStart={handleDragStart}
         >
-          <div className="flex justify-between items-center mb-2">
-            <h1 className="text-3xl font-bold">{ projectName}</h1>
+          <div className="flex justify-between items-center mb-1">
+            <h1 className="text-2xl font-bold">{ projectName}</h1>
             <ViewToggler projectId={projectId} />
 
             {/* Edit task Dialog */}
