@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   AlertCircle,
   MessageCircle,
+  Paperclip,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -49,6 +50,7 @@ import { updateTask } from "@/actions/task";
 import { cn } from "@/lib/utils";
 import { useTaskContext } from "@/context/TaskContext";
 import { Comments } from "@/components/Comments";
+import { Attachments } from "@/components/Attachments";
 import { authClient } from "@/lib/auth-client";
 
 // 👇 Simplified schema: use raw strings as enums
@@ -156,7 +158,7 @@ export function EditTaskDialog() {
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-4 w-full rounded-none border-b">
+          <TabsList className="grid grid-cols-5 w-full rounded-none border-b">
             <TabsTrigger
               value="details"
               className="data-[state=active]:bg-background"
@@ -184,6 +186,13 @@ export function EditTaskDialog() {
             >
               <MessageCircle className="h-4 w-4 mr-2" />
               Comments
+            </TabsTrigger>
+            <TabsTrigger
+              value="attachments"
+              className="data-[state=active]:bg-background"
+            >
+              <Paperclip className="h-4 w-4 mr-2" />
+              Files
             </TabsTrigger>
           </TabsList>
 
@@ -390,11 +399,19 @@ export function EditTaskDialog() {
                     currentUserId={currentUser?.id}
                   />
                 </TabsContent>
+
+                <TabsContent value="attachments" className="mt-0">
+                  <Attachments 
+                    taskId={taskBeingEdited?.id || ""} 
+                    projectId={taskStates.find(state => state.id === taskBeingEdited?.stateId)?.projectId || ""}
+                    currentUserId={currentUser?.id}
+                  />
+                </TabsContent>
               </div>
 
               <div className="flex items-center justify-between p-4 border-t bg-muted/30 absolute bottom-0 left-0 w-full">
                 <div className="flex items-center gap-1">
-                  {["details", "schedule", "assignees", "comments"].map((tab, index) => (
+                  {["details", "schedule", "assignees", "comments", "attachments"].map((tab, index) => (
                     <div
                       key={tab}
                       className={cn(
@@ -403,7 +420,7 @@ export function EditTaskDialog() {
                           ? "w-6 bg-primary"
                           : "w-1.5 bg-muted-foreground/30",
                         index <
-                          ["details", "schedule", "assignees", "comments"].indexOf(
+                          ["details", "schedule", "assignees", "comments", "attachments"].indexOf(
                             activeTab
                           ) && "bg-primary/60 w-1.5"
                       )}

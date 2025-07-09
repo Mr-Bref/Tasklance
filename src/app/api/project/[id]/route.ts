@@ -54,6 +54,12 @@ export async function GET(
                 },
               },
               state: true,
+              _count: {
+                select: {
+                  attachments: true,
+                  comments: true,
+                },
+              },
             },
           },
         },
@@ -94,6 +100,8 @@ export async function GET(
             ta.participant.user.image || "/placeholder.svg?height=32&width=32",
         })),
         stateId: task.stateId,
+        attachmentCount: task._count.attachments,
+        commentCount: task._count.comments,
       })),
     }));
 
