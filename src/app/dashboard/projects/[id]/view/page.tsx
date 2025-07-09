@@ -13,6 +13,7 @@ import Task from "@/components/Task";
 import { Suspense } from "react";
 import { authClient } from "@/lib/auth-client";
 import { NavUser } from "@/components/nav-user";
+import { AdvancedSearch } from "@/components/AdvancedSearch";
 
 export default async function ProjectPage({
   params,
@@ -52,10 +53,9 @@ export default async function ProjectPage({
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        <div>
-      
-            <NavUser/>
-        
+        <div className="flex items-center gap-2">
+          <AdvancedSearch />
+          <NavUser />
         </div>
       </header>
       <div className="flex flex-1 flex-col px-6 pt-0">
