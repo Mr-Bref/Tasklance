@@ -10,6 +10,8 @@ import {
   Flag,
   MoreHorizontal,
   User,
+  Paperclip,
+  MessageCircle,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -50,6 +52,8 @@ export function TaskCard({
   dueDate,
   assignees,
   className,
+  attachmentCount = 0,
+  commentCount = 0,
 }: TaskCardProps) {
   const { fetchTasks, setIsEditDialogOpen, setTaskBeingEdited } =
     useTaskContext();
@@ -192,29 +196,47 @@ export function TaskCard({
           </div>
 
           <div className="flex justify-between items-center w-full gap-2">
-            {assignees && assignees.length > 0 ? (
-              <div className="flex items-center gap-1.5">
-                <Avatar className="h-5 w-5">
-                  <AvatarImage
-                    src={assignees[0]?.avatar || "/placeholder.svg"} // Use the first assignee
-                    alt={assignees[0]?.name}
-                  />
-                  <AvatarFallback className="text-[10px]">
-                    {assignees[0]?.name.charAt(0)}{" "}
-                    {/* Display first character of the first assignee's name */}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-xs text-muted-foreground truncate max-w-[100px]">
-                  {assignees[0]?.name}{" "}
-                  {/* Display the name of the first assignee */}
-                </span>
+            <div className="flex items-center gap-3">
+              {assignees && assignees.length > 0 ? (
+                <div className="flex items-center gap-1.5">
+                  <Avatar className="h-5 w-5">
+                    <AvatarImage
+                      src={assignees[0]?.avatar || "/placeholder.svg"} // Use the first assignee
+                      alt={assignees[0]?.name}
+                    />
+                    <AvatarFallback className="text-[10px]">
+                      {assignees[0]?.name.charAt(0)}{" "}
+                      {/* Display first character of the first assignee's name */}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-xs text-muted-foreground truncate max-w-[100px]">
+                    {assignees[0]?.name}{" "}
+                    {/* Display the name of the first assignee */}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <User className="h-3 w-3" />
+                  <span>Unassigned</span>
+                </div>
+              )}
+
+              {/* Attachment and Comment Indicators */}
+              <div className="flex items-center gap-2">
+                {attachmentCount > 0 && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Paperclip className="h-3 w-3" />
+                    <span>{attachmentCount}</span>
+                  </div>
+                )}
+                {commentCount > 0 && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <MessageCircle className="h-3 w-3" />
+                    <span>{commentCount}</span>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <User className="h-3 w-3" />
-                <span>Unassigned</span>
-              </div>
-            )}
+            </div>
 
             {state !== "completed" ? (
               <Button

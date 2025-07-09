@@ -27,6 +27,8 @@ model User {
   accounts      Account[]
   participants  Participant[]
   invitations    Invitation[]
+  comments      Comment[]
+  attachments   Attachment[]
 
   @@map("user")
 }
@@ -48,10 +50,41 @@ model Task {
   priority         Priority          @default(MEDIUM)
   dueDate          DateTime
   taskAssignements TaskAssignement[]
+  comments         Comment[]
+  attachments      Attachment[]
 
   state   State  @relation(fields: [stateId], references: [id])
   stateId String
   color  String? @db.Text
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  filename  String
+  originalName String
+  mimeType  String
+  size      Int      // Size in bytes
+  url       String   @db.Text
+  createdAt DateTime @default(now())
+
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+
+  uploadedBy   User   @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  uploadedById String
 }
 
 model Participant {

@@ -28,6 +28,8 @@ export interface Task {
   dueDate: Date;
   assignees: UserPreview[];
   stateId: string;
+  attachmentCount?: number;
+  commentCount?: number;
 }
 // Define the context state and actions
 interface TaskContextType {
