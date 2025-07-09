@@ -13,6 +13,7 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
+  MessageCircle,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,8 @@ import { toast } from "sonner";
 import { updateTask } from "@/actions/task";
 import { cn } from "@/lib/utils";
 import { useTaskContext } from "@/context/TaskContext";
+import { Comments } from "@/components/Comments";
+import { authClient } from "@/lib/auth-client";
 
 // 👇 Simplified schema: use raw strings as enums
 const TaskSchema = z.object({
@@ -77,6 +80,7 @@ const priorityConfig = {
 
 export function EditTaskDialog() {
   const [activeTab, setActiveTab] = useState("details");
+  const [currentUser, setCurrentUser] = useState<{ id: string; name?: string } | null>(null);
 
   const {
     taskBeingEdited,
@@ -86,6 +90,25 @@ export function EditTaskDialog() {
     participants,
     taskStates ,
   } = useTaskContext();
+
+  // Get current user
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const session = await authClient.getSession();
+        if (session.data?.user) {
+          setCurrentUser({
+            id: session.data.user.id,
+            name: session.data.user.name || undefined,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to get current user:", error);
+      }
+    };
+
+    getCurrentUser();
+  }, []);
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(TaskSchema),
@@ -133,7 +156,7 @@ export function EditTaskDialog() {
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-3 w-full rounded-none border-b">
+          <TabsList className="grid grid-cols-4 w-full rounded-none border-b">
             <TabsTrigger
               value="details"
               className="data-[state=active]:bg-background"
@@ -154,6 +177,13 @@ export function EditTaskDialog() {
             >
               <User className="h-4 w-4 mr-2" />
               Assignees
+            </TabsTrigger>
+            <TabsTrigger
+              value="comments"
+              className="data-[state=active]:bg-background"
+            >
+              <MessageCircle className="h-4 w-4 mr-2" />
+              Comments
             </TabsTrigger>
           </TabsList>
 
@@ -352,11 +382,19 @@ export function EditTaskDialog() {
                     }}
                   />
                 </TabsContent>
+
+                <TabsContent value="comments" className="mt-0">
+                  <Comments 
+                    taskId={taskBeingEdited?.id || ""} 
+                    projectId={taskStates.find(state => state.id === taskBeingEdited?.stateId)?.projectId || ""}
+                    currentUserId={currentUser?.id}
+                  />
+                </TabsContent>
               </div>
 
               <div className="flex items-center justify-between p-4 border-t bg-muted/30 absolute bottom-0 left-0 w-full">
                 <div className="flex items-center gap-1">
-                  {["details", "schedule", "assignees"].map((tab, index) => (
+                  {["details", "schedule", "assignees", "comments"].map((tab, index) => (
                     <div
                       key={tab}
                       className={cn(
@@ -365,7 +403,7 @@ export function EditTaskDialog() {
                           ? "w-6 bg-primary"
                           : "w-1.5 bg-muted-foreground/30",
                         index <
-                          ["details", "schedule", "assignees"].indexOf(
+                          ["details", "schedule", "assignees", "comments"].indexOf(
                             activeTab
                           ) && "bg-primary/60 w-1.5"
                       )}

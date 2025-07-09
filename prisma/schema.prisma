@@ -27,6 +27,7 @@ model User {
   accounts      Account[]
   participants  Participant[]
   invitations    Invitation[]
+  comments      Comment[]
 
   @@map("user")
 }
@@ -48,10 +49,24 @@ model Task {
   priority         Priority          @default(MEDIUM)
   dueDate          DateTime
   taskAssignements TaskAssignement[]
+  comments         Comment[]
 
   state   State  @relation(fields: [stateId], references: [id])
   stateId String
   color  String? @db.Text
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
 }
 
 model Participant {
