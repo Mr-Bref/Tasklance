@@ -244,7 +244,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Brefix\\Desktop\\task-saas\\src\\generated\\client",
+      "value": "/home/ubuntu/Desktop/projet/Tasklance/src/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -253,12 +253,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Brefix\\Desktop\\task-saas\\prisma\\schema.prisma",
+    "sourceFilePath": "/home/ubuntu/Desktop/projet/Tasklance/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

@@ -9,10 +9,12 @@ import { CtaSection } from "./CtaSection";
 import { TestimonialsSection } from "./TestimonialSection";
 import { FeaturesSection } from "./FeacturesSection";
 import { HeroSection } from "./HeroSection";
+import Nav from "./Nav";
 
 export default function LandingPage() {
   return (
     <div>
+      <Nav />
       <HeroSection />
       <FeaturesSection />
       <TestimonialsSection />
