@@ -13,6 +13,7 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
+  X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -74,7 +75,6 @@ const priorityConfig = {
   high: { label: "High", color: "bg-rose-500" },
 };
 
-
 export function EditTaskDialog() {
   const [activeTab, setActiveTab] = useState("details");
 
@@ -84,7 +84,7 @@ export function EditTaskDialog() {
     setIsEditDialogOpen,
     fetchTasks,
     participants,
-    taskStates ,
+    taskStates,
   } = useTaskContext();
 
   const form = useForm<TaskFormValues>({
@@ -127,48 +127,69 @@ export function EditTaskDialog() {
 
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-      <DialogContent className="max-w-md p-4 min-h-[500px] overflow-hidden flex justify-start flex-col">
-        <DialogHeader className="px-4 pt-3">
-          <DialogTitle>Edit Task</DialogTitle>
+      <DialogContent className="max-w-lg p-0 overflow-hidden bg-white border-0 shadow-2xl">
+        {/* Header avec gradient */}
+        <DialogHeader className="px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-lg font-semibold text-gray-900">
+              Edit Task
+            </DialogTitle>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0 hover:bg-white/50"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-3 w-full rounded-none border-b">
+          {/* Navigation tabs stylée */}
+          <TabsList className="grid grid-cols-3 w-full h-12 bg-gray-50 rounded-none border-b">
             <TabsTrigger
               value="details"
-              className="data-[state=active]:bg-background"
+              className="data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:border-b-2 data-[state=active]:border-green-500 rounded-none h-full"
             >
               <ClipboardList className="h-4 w-4 mr-2" />
               Details
             </TabsTrigger>
             <TabsTrigger
               value="schedule"
-              className="data-[state=active]:bg-background"
+              className="data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:border-b-2 data-[state=active]:border-green-500 rounded-none h-full"
             >
               <CalendarIcon className="h-4 w-4 mr-2" />
               Schedule
             </TabsTrigger>
             <TabsTrigger
               value="assignees"
-              className="data-[state=active]:bg-background"
+              className="data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:border-b-2 data-[state=active]:border-green-500 rounded-none h-full"
             >
               <User className="h-4 w-4 mr-2" />
-              Assignees
+              Team
             </TabsTrigger>
           </TabsList>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="px-4 py-3 max-h-[60vh] overflow-y-auto">
-                <TabsContent value="details" className="mt-0 space-y-3">
+              {/* Contenu scrollable */}
+              <div className="px-6 py-4 max-h-[400px] overflow-y-auto">
+                <TabsContent value="details" className="mt-0 space-y-4">
                   <FormField
                     control={form.control}
                     name="title"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Title</FormLabel>
+                        <FormLabel className="text-sm font-medium text-gray-700">
+                          Title
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="Task title" {...field} />
+                          <Input
+                            placeholder="Task title"
+                            className="h-9 border-gray-200 focus:border-green-500 focus:ring-green-500"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -180,11 +201,13 @@ export function EditTaskDialog() {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Description</FormLabel>
+                        <FormLabel className="text-sm font-medium text-gray-700">
+                          Description
+                        </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Task description"
-                            className="resize-none h-20"
+                            className="resize-none h-20 border-gray-200 focus:border-green-500 focus:ring-green-500"
                             {...field}
                             value={field.value || ""}
                           />
@@ -199,7 +222,9 @@ export function EditTaskDialog() {
                     name="priority"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Priority</FormLabel>
+                        <FormLabel className="text-sm font-medium text-gray-700">
+                          Priority
+                        </FormLabel>
                         <div className="grid grid-cols-3 gap-2">
                           {Object.entries(priorityConfig).map(
                             ([value, config]) => (
@@ -210,8 +235,10 @@ export function EditTaskDialog() {
                                   field.value === value ? "default" : "outline"
                                 }
                                 className={cn(
-                                  "justify-start h-14 px-3",
-                                  field.value === value && "ring-2"
+                                  "justify-start h-10 px-3 text-xs transition-all",
+                                  field.value === value
+                                    ? "bg-green-600 hover:bg-green-700 border-green-600"
+                                    : "hover:bg-gray-50 border-gray-200"
                                 )}
                                 onClick={() => field.onChange(value)}
                               >
@@ -227,37 +254,70 @@ export function EditTaskDialog() {
                       </FormItem>
                     )}
                   />
+
+                  <FormField
+                    control={form.control}
+                    name="stateId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700">
+                          Status
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="h-9 border-gray-200 focus:border-green-500 focus:ring-green-500">
+                              <SelectValue placeholder="Select status" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {taskStates.map((state) => (
+                              <SelectItem key={state.id} value={state.id}>
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className="h-2 w-2 rounded-full"
+                                    style={{ backgroundColor: state.color || "#6B7280" }}
+                                  />
+                                  {state.label}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </TabsContent>
 
-                <FormField
-                  control={form.control}
-                  name="stateId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Status</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select status" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {taskStates.map((state) => (
-                            <SelectItem key={state.id} value={state.id}>
-                              {state.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <TabsContent value="schedule" className="mt-0 space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="dueDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700">
+                          Due Date
+                        </FormLabel>
+                        <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) => date < new Date()}
+                            initialFocus
+                            className="rounded-md border-0"
+                          />
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
 
-                <TabsContent value="assignees" className="mt-0">
+                <TabsContent value="assignees" className="mt-0 space-y-4">
                   <FormField
                     control={form.control}
                     name="assignees"
@@ -272,80 +332,98 @@ export function EditTaskDialog() {
 
                       return (
                         <FormItem>
-                          <FormLabel className="flex items-center gap-2">
-                            <Users className="h-4 w-4" />
-                            Assign To
-                          </FormLabel>
-                          <div>
-                            <div className="space-y-2 mt-2">
-                              <h4 className="text-sm font-semibold text-muted-foreground">
-                                Assigned
-                              </h4>
-                              {assignedMembers.map((member) => (
-                                <div
-                                  key={member.id}
-                                  className="flex items-center gap-3 p-2"
-                                >
-                                  <Avatar className="h-8 w-8 rounded-lg">
-                                    <AvatarImage
-                                      src={member.avatar}
-                                      alt={member.name}
-                                    />
-                                    <AvatarFallback className="rounded-lg">
-                                      CN
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <span className="flex-1">{member.name}</span>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => {
-                                      const current = field.value ?? [];
-                                      field.onChange(
-                                        current.filter(
-                                          (m) => m.id !== member.id
-                                        )
-                                      );
-                                    }}
+                          {/* Assigned members */}
+                          {assignedMembers.length > 0 && (
+                            <div className="space-y-2">
+                              <FormLabel className="text-sm font-medium text-gray-700">
+                                Assigned ({assignedMembers.length})
+                              </FormLabel>
+                              <div className="space-y-2">
+                                {assignedMembers.map((member) => (
+                                  <div
+                                    key={member.id}
+                                    className="flex items-center gap-3 p-2 bg-green-50 rounded-lg border border-green-100"
                                   >
-                                    Remove
-                                  </Button>
-                                </div>
-                              ))}
+                                    <Avatar className="h-8 w-8">
+                                      <AvatarImage
+                                        src={member.avatar}
+                                        alt={member.name}
+                                      />
+                                      <AvatarFallback className="text-xs bg-green-100 text-green-700">
+                                        {member.name
+                                          .split(" ")
+                                          .map((n) => n[0])
+                                          .join("")
+                                          .toUpperCase()}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <span className="flex-1 text-sm font-medium">
+                                      {member.name}
+                                    </span>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      className="h-7 px-2 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                                      onClick={() => {
+                                        const current = field.value ?? [];
+                                        field.onChange(
+                                          current.filter(
+                                            (m) => m.id !== member.id
+                                          )
+                                        );
+                                      }}
+                                    >
+                                      Remove
+                                    </Button>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
+                          )}
 
-                            <div className="space-y-2 mt-4">
-                              <h4 className="text-sm font-semibold text-muted-foreground">
-                                Team
-                              </h4>
-                              {unassignedMembers.map((member) => (
-                                <div
-                                  key={member.id}
-                                  className="flex items-center gap-3 p-2"
-                                >
-                                  <Avatar className="h-8 w-8 rounded-lg">
-                                    <AvatarImage
-                                      src={member.avatar}
-                                      alt={member.name}
-                                    />
-                                    <AvatarFallback className="rounded-lg">
-                                      CN
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <span className="flex-1">{member.name}</span>
-                                  <Button
-                                    size="sm"
-                                    onClick={() => {
-                                      const current = field.value ?? [];
-                                      field.onChange([...current, member]);
-                                    }}
+                          {/* Available members */}
+                          {unassignedMembers.length > 0 && (
+                            <div className="space-y-2">
+                              <FormLabel className="text-sm font-medium text-gray-700">
+                                Available Team Members
+                              </FormLabel>
+                              <div className="space-y-2">
+                                {unassignedMembers.map((member) => (
+                                  <div
+                                    key={member.id}
+                                    className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors"
                                   >
-                                    Assign
-                                  </Button>
-                                </div>
-                              ))}
+                                    <Avatar className="h-8 w-8">
+                                      <AvatarImage
+                                        src={member.avatar}
+                                        alt={member.name}
+                                      />
+                                      <AvatarFallback className="text-xs">
+                                        {member.name
+                                          .split(" ")
+                                          .map((n) => n[0])
+                                          .join("")
+                                          .toUpperCase()}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <span className="flex-1 text-sm">
+                                      {member.name}
+                                    </span>
+                                    <Button
+                                      size="sm"
+                                      className="h-7 px-3 text-xs bg-green-600 hover:bg-green-700"
+                                      onClick={() => {
+                                        const current = field.value ?? [];
+                                        field.onChange([...current, member]);
+                                      }}
+                                    >
+                                      Assign
+                                    </Button>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          )}
                           <FormMessage />
                         </FormItem>
                       );
@@ -354,31 +432,29 @@ export function EditTaskDialog() {
                 </TabsContent>
               </div>
 
-              <div className="flex items-center justify-between p-4 border-t bg-muted/30 absolute bottom-0 left-0 w-full">
+              {/* Footer avec actions */}
+              <div className="flex items-center justify-between px-6 py-4 bg-gray-50 border-t border-gray-200">
                 <div className="flex items-center gap-1">
                   {["details", "schedule", "assignees"].map((tab, index) => (
                     <div
                       key={tab}
                       className={cn(
-                        "h-1.5 rounded-full transition-all",
+                        "h-2 rounded-full transition-all cursor-pointer",
                         activeTab === tab
-                          ? "w-6 bg-primary"
-                          : "w-1.5 bg-muted-foreground/30",
-                        index <
-                          ["details", "schedule", "assignees"].indexOf(
-                            activeTab
-                          ) && "bg-primary/60 w-1.5"
+                          ? "w-8 bg-green-600"
+                          : "w-2 bg-gray-300 hover:bg-gray-400"
                       )}
                       onClick={() => setActiveTab(tab)}
                     />
                   ))}
                 </div>
 
-                <div className="flex gap-2 relative bottom-0">
+                <div className="flex gap-2">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
+                    className="h-9 px-4 text-sm border-gray-200 hover:bg-gray-50"
                     onClick={() => setIsEditDialogOpen(false)}
                   >
                     Cancel
@@ -386,15 +462,16 @@ export function EditTaskDialog() {
                   <Button
                     type="submit"
                     size="sm"
+                    className="h-9 px-4 text-sm bg-green-600 hover:bg-green-700"
                     disabled={form.formState.isSubmitting}
                   >
                     {form.formState.isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                        Saving
+                        Saving...
                       </>
                     ) : (
-                      "Save Task"
+                      "Save Changes"
                     )}
                   </Button>
                 </div>
